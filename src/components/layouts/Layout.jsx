@@ -16,6 +16,9 @@ export default function Layout({ children }) {
         <main className="flex flex-col flex-1 overflow-hidden px-4 md:px-6 py-4 bg-white">
           <div className="flex-1 h-full">{children || <Outlet />}</div>
         </main>
+        {/* <main className="flex flex-col flex-1 overflow-hidden px-4 md:px-6 py-4 bg-white">
+          <div className="flex-1 h-full">{children || <Outlet />}</div>
+        </main> */}
         
       </div>
     </div>
