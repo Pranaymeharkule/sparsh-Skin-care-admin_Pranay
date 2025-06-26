@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import Login from "../pages/auth/Login.jsx";
 import ServiceManager from "../pages/modules/ServiceManager/ServiceManger.jsx";
-import AppointmentManager from "../pages/modules/AppointManager.jsx/AppointmentManager.jsx";
+import AppointmentManager from "../pages/modules/AppointmentManager/AppointmentManager.jsx";
 import ContactInquiryManager from "../pages/modules/ContactInquiryManager/ContactInquiryManager.jsx";
 
 const PublicRoute = () => {
