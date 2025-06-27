@@ -19,7 +19,7 @@ export default function PaymentTable({ data = [] }) {
             ].map((header) => (
               <th
                 key={header}
-                className="px-3 py-2 font-medium text-gray-700 whitespace-nowrap"
+                className="px-3 py-2 text-left font-medium text-gray-700 whitespace-nowrap"
               >
                 {header}
               </th>
@@ -30,15 +30,15 @@ export default function PaymentTable({ data = [] }) {
           {data.map((item) => (
             <tr
               key={item.id}
-              className="border-b border-dotted border-blue-300"
+              className="border-b text-left  border-dotted border-blue-300"
             >
               <td className="px-3 py-2">{item.id}</td>
               <td className="px-3 py-2">{item.name}</td>
               <td className="px-3 py-2">{item.contact}</td>
               <td className="px-3 py-2">{item.datetime}</td>
-              <td className="px-3 py-2">{item.city}</td>
-              <td className="px-3 py-2">{item.source}</td>
-              <td className="px-3 py-2">{item.ref}</td>
+              <td className="px-3 py-2 ">{item.city}</td>
+              <td className="px-3 py-2 ">{item.source}</td>
+              <td className="px-3 py-2 ">{item.ref}</td>
               <td className="px-3 py-2 text-[#00D921] font-medium">
                 {item.status}
               </td>
