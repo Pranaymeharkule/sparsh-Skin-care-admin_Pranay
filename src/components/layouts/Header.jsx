@@ -6,7 +6,7 @@ import { FaBars } from "react-icons/fa";
 
 export default function Header({ onMenuClick }) {
   return (
-    <header className="h-24 px-6 bg-gradient-to-r from-[#8C88D1] to-[#716FCD] flex justify-between md:justify-end items-center">
+    <header className="h-20 px-6 pr-6 md:pr-14 bg-gradient-to-r from-[#8C88D1] to-[#716FCD] flex justify-between md:justify-end items-center">
       <button
         className="flex md:hidden items-center justify-center bg-white rounded-xl px-3 py-3 h-fit"
         onClick={onMenuClick}
