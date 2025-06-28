@@ -1,9 +1,12 @@
-import React from "react";
-import { FiSearch } from "react-icons/fi";
-import { HiOutlineFilter } from "react-icons/hi";
-import { FaFileExcel, FaFilePdf, FaRegCopy } from "react-icons/fa";
-import { TiBell } from "react-icons/ti";
+    import React from "react";
+
+
 import PaymentTable from "../../../components/layouts/PaymentTable";
+import ExportExcelIcon from "../../../components/icons/ExportExcelIcon";
+import ExportPdfIcon from "../../../components/icons/ExportPdfIcon";
+import FilterIcon from "../../../components/icons/FilterIcon";
+import SearchIcon from "../../../components/icons/SearchIcon";
+import BellIcon from "../../../components/icons/BellIcon";
 
 const data = [
   {
@@ -91,14 +94,14 @@ export default function AppointmentManager() {
   return (
     <div className="p-4 md:p-8 font-sans text-sm w-full">
       <div className="flex items-center gap-3 mb-4 text-xl md:text-2xl font-semibold">
-        <TiBell size={30} className="text-xl" />
-        <h1>Payment Manager</h1>
+        <BellIcon size={30} className="text-xl" />
+        <h1>Appointment Manager</h1>
       </div>
 
       <div className="flex flex-col lg:flex-row justify-between items-start gap-4 mb-4 w-full">
         <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-2/3">
           <div className="flex items-center w-full md:w-1/3 sm:w-3/4 border rounded-md shadow-sm px-3 py-2 bg-white">
-            <FiSearch className="text-gray-500 text-xl mr-2" />
+            <SearchIcon className="text-gray-500 text-xl mr-2" />
             <input
               type="text"
               placeholder="Search Payment Transaction"
@@ -107,16 +110,16 @@ export default function AppointmentManager() {
           </div>
           <button className="flex items-center justify-center gap-2 border border-gray-300 px-4 py-2 rounded-md bg-white shadow-sm text-sm font-medium">
             Filter
-            <HiOutlineFilter size={20} />
+            <FilterIcon size={20} />
           </button>
         </div>
 
         <div className="flex flex-wrap gap-2">
           <button className="flex items-center gap-2 bg-green-100 text-gray-700 border border-[#D4FFBD] px-3 py-2 rounded shadow-sm text-sm">
-            <FaFileExcel /> Export Excel
+            <ExportExcelIcon /> Export Excel
           </button>
           <button className="flex items-center gap-2 bg-green-100 text-gray-700 border border-[#D4FFBD] px-3 py-2 rounded shadow-sm text-sm">
-            <FaRegCopy /> Export PDF
+            <ExportPdfIcon /> Export PDF
           </button>
         </div>
       </div>

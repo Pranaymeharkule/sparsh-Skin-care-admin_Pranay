@@ -2,6 +2,9 @@ import React from "react";
 import { IoIosSearch } from "react-icons/io";
 import { FaChevronDown } from "react-icons/fa";
 import InquiryCard from "../../../components/InquiryCard";
+import { PageHeader } from "../../../components/common/PageHeader";
+import DownIcon from "../../../components/icons/DownIcon";
+import SearchIcon from "../../../components/icons/SearchIcon";
 
 const inquiries = [
   {
@@ -33,57 +36,49 @@ const inquiries = [
 
 const InquiryManager = () => {
   return (
-    <div className="flex flex-col h-full max-w-[52rem]">
-      {/* Top Controls */}
-      <div className="px-6 pt-6">
-        {/* Heading */}
-        <div className="w-fit">
-          <h2 className="text-2xl font-semibold">Contact Inquiry Manager</h2>
-          <p className="text-sm text-gray-500">
-            Manage & Respond to customer Inquiry
-          </p>
+    <div className="flex flex-col h-full max-w-[56rem]">
+      <PageHeader
+        title={"Contact Inquiry Manager"}
+        subtitle={"Manage & Respond to customer Inquiry"}
+      />
+
+      {/* Status Cards */}
+      <div className="flex gap-4">
+        <div className="bg-[#FEEBE4] rounded-2xl px-4 py-2 w-32 text-center border border-[#FFCACA]">
+          <p className="text-base font-medium">New</p>
+          <p className="text-3xl font-semibold">2</p>
+        </div>
+        <div className="bg-[#FEEBE4] rounded-2xl px-4 py-2 w-32 text-center border border-[#FFCACA]">
+          <p className="text-base font-medium">Pending</p>
+          <p className="text-3xl font-semibold">3</p>
+        </div>
+        <div className="bg-[#D8FFA2] rounded-2xl px-4 py-2 w-32 text-center border border-[#C8FF7D]">
+          <p className="text-base font-medium">Replied</p>
+          <p className="text-3xl font-semibold">12</p>
+        </div>
+      </div>
+
+      {/* Search and Filter */}
+      <div className="flex items-center gap-8 mt-4 text-sm ">
+        <div className="relative w-full max-w-full">
+          <SearchIcon className="absolute inset-y-0 left-3 top-2 flex items-center text-xl" />
+          <input
+            type="text"
+            placeholder="Search by Name."
+            className="w-full border rounded-lg border-[#a0a0a0] pl-10 pr-4 py-2 outline-none"
+          />
         </div>
 
-        {/* Status Cards */}
-        <div className="flex gap-4 mt-6">
-          <div className="bg-[#FEEBE4] rounded-2xl p-4 w-32 text-center border border-[#FFCACA]">
-            <p className="text-sm font-semibold">New</p>
-            <p className="text-2xl font-bold">2</p>
-          </div>
-          <div className="bg-[#FEEBE4] rounded-2xl p-4 w-32 text-center border border-[#FFCACA]">
-            <p className="text-sm font-semibold">Pending</p>
-            <p className="text-2xl font-bold">3</p>
-          </div>
-          <div className="bg-[#D8FFA2] rounded-2xl p-4 w-32 text-center border border-[#C8FF7D]">
-            <p className="text-sm font-semibold">Replied</p>
-            <p className="text-2xl font-bold">12</p>
-          </div>
-        </div>
-
-        {/* Search and Filter */}
-        <div className="flex items-center gap-4 mt-6">
-          <div className="relative w-full max-w-full">
-            <span className="absolute inset-y-0 left-3 flex items-center text-gray-400 text-lg">
-              <IoIosSearch />
-            </span>
-            <input
-              type="text"
-              placeholder="Search by Name."
-              className="w-full border rounded-lg border-gray-500 pl-10 pr-4 py-2 text-sm outline-none"
-            />
-          </div>
-
-          <div className="relative">
-            <select className="border rounded-lg font-semibold border-gray-500 px-3 py-2 text-sm appearance-none pr-6">
-              <option>All Status</option>
-            </select>
-            <FaChevronDown className="absolute right-2 top-3 text-xs pointer-events-none text-gray-500" />
-          </div>
+        <div className="relative">
+          <select className="border rounded-lg font-semibold border-[#A0A0A0] px-3 py-2 appearance-none pr-8">
+            <option>All Status</option>
+          </select>
+          <DownIcon className="absolute right-2 top-2.5 pointer-events-none text-lg" />
         </div>
       </div>
 
       {/* Scrollable Cards Section */}
-      <div className="px-6 mt-2 space-y-6 flex-1 overflow-y-auto scrollbar-hidden min-h-0">
+      <div className="px-2 mt-2 space-y-0 flex-1 overflow-y-auto scrollbar-hidden min-h-0">
         {inquiries.map((item, idx) => (
           <InquiryCard inquiry={item} key={idx} />
         ))}
