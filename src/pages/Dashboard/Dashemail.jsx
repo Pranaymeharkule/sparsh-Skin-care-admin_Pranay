@@ -1,16 +1,40 @@
 import React, { useState } from 'react';
 
-const OTPLoginCard = () => {
+
+import { Eye, EyeOff } from "lucide-react";
+import img9 from "../../assets/Gallery/img9.png"; // Doctor illustration
+import logo from "../../assets/Gallery/logo asarsh.jpg"; // Add your logo image here
+
+export default function OTPLoginCard() {
   const [email, setEmail] = useState('');
 
   const handleGetOTP = () => {
     // Add your OTP sending logic here
     alert(`OTP will be sent to: ${email}`);
   };
-
   return (
-    <div className="flex items-center justify-center min-h-screen bg-white">
-      <div className="bg-gradient-to-br from-orange-100 to-pink-100 p-8 rounded-2xl shadow-xl w-full max-w-md">
+    <div className="min-h-screen bg-[#fde7e2] flex flex-col px-8 py-6  relative overflow-hidden">
+      {/* Top Row: Logo and Welcome */}
+      <div className="flex items-center justify-between mb-8">
+        <img src={logo} alt="Sparsh Logo" className="w-16 h-auto" />
+       
+      </div>
+
+      {/* Main content */}
+      <div className="flex flex-col md:flex-row items-center justify-center gap-19 md:gap-">
+        {/* Left Illustration */}
+        <div className="w-full md:w-1/2">
+          <img src={img9} alt="Doctor Illustration" className="w-full " />
+        </div>
+
+
+
+ <div className="text-center  flex-1">
+
+   <h1 className="text-4xl font-bold md:mr-38  text-gray-900">Forgot Password?</h1>
+          <p className="text-gray-600  md:mr-38 mb-9">To the Dashboard of Sparsh Skin Clinic</p>
+        {/* Login Form */}
+         <div className="bg-gradient-to-br from-orange-100 to-pink-100 p-8 rounded-2xl shadow-xl w-full max-w-md">
         <h2 className="text-xl font-bold text-center text-gray-900">
           Sparsh Skin Care Admin
         </h2>
@@ -42,8 +66,16 @@ const OTPLoginCard = () => {
           Get OTP
         </button>
       </div>
+</div>
+
+
+
+
+      </div>
+
+      {/* Decorative Circles */}
+      <div className="absolute top-0 right-0 w-80 h-100 bg-purple-800 rounded-full opacity-40 translate-x-1/2 -translate-y-1/2"></div>
+      <div className="absolute bottom-0 right-0 w-40 h-40 bg-purple-800 rounded-full opacity-40 -translate-x-1/2 translate-y-1/2"></div>
     </div>
   );
-};
-
-export default OTPLoginCard;
+}
