@@ -12,14 +12,14 @@ const PublicRoute = () => {
   return (
     <Routes>
       <Route
-        path=""
+        path="/login"
         element={
           <Login />
         }
       />
       {/* User Management  */}
       <Route
-        path="/dashboard"
+        path=""
         element={
            <DashboardPage /> 
         }
