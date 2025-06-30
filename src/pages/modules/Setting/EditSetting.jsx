@@ -1,4 +1,4 @@
-import React, { useState , useRef } from 'react';
+import React, { useState } from 'react';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import UserImg from '../../../assets/user.png';
 import ShieldIcon from '../../../components/icons/SearchIcon';
@@ -7,10 +7,9 @@ import ShowPasswordIcon from '../../../components/icons/ShowPasswordIcon';
 import HidePasswordIcon from '../../../components/icons/HidePasswordIcon';
 import { useNavigate } from 'react-router-dom';
 
-export default function OTPPage() {
-  
+export default function EditSetting() {
   return (
-   <div className="h-full overflow-auto p-6">
+    <div className="h-full overflow-auto p-6">
       <div className="flex flex-col md:flex-row justify-between gap-8">
         {/* Left: Doctor Profile */}
         <div className="md:w-3/5">
@@ -67,12 +66,10 @@ export default function OTPPage() {
         {/* Right: Account & Security */}
         <div className="md:px-8   sm:px-50">
           {/* <PasswordChanger/> */}
-          <Otp />
+          <PasswordChanger />
         </div>
       </div>
     </div>
-
-
   );
 }
 
@@ -81,7 +78,15 @@ function PasswordChanger(){
   const [showOld, setShowOld] = useState(false);
   const [showNew, setShowNew] = useState(false);
 
-  return (   <div className="bg-[#FEEBE4] w-84 border border-[#FC437B] rounded-xl shadow-lg relative">
+
+   const navigate = useNavigate();
+   const handleGetOtp = () => {
+      // Simulate sending OTP...
+      // Navigate to enter OTP page
+      navigate('/setting');
+    };
+
+  return (   <div className="bg-[#FEEBE4] w-84 border border-[#FC437B]  rounded-xl shadow-lg relative">
           <div className="flex p-6 items-center justify-center border-b">
             <ShieldIcon className="mx-4 text-black" />
             <h3 className="font-semibold text-md">Account & Security</h3>
@@ -122,7 +127,7 @@ function PasswordChanger(){
               Forgot Password?
             </div>
             <button
-              type="submit"
+              onClick={handleGetOtp} 
               className="w-full bg-indigo-900 text-white py-3 rounded-xl text-sm font-semibold"
             >
               Done
@@ -130,67 +135,3 @@ function PasswordChanger(){
           </form>
         </div>)
 }
-
-
-
-function Otp ()  {
-   const navigate = useNavigate();
-  const inputs = useRef([]);
-
-  const handleInput = (e, index) => {
-    const value = e.target.value;
-    if (/^[0-9]$/.test(value)) {
-      if (index < 5) {
-        inputs.current[index + 1]?.focus();
-      }
-    } else {
-      e.target.value = '';
-    }
-  };
-
-  const handlePaste = (e) => {
-    e.preventDefault();
-    const paste = e.clipboardData.getData('text').slice(0, 6).split('');
-    paste.forEach((char, i) => {
-      if (inputs.current[i]) {
-        inputs.current[i].value = char;
-      }
-    });
-    inputs.current[Math.min(paste.length, 5)]?.focus();
-  };
-   
-
-
-   const handleGetOtp = () => {
-    // Simulate sending OTP...
-    // Navigate to enter OTP page
-    navigate('/newpassword');
-  };
-  return (
-    <div className="bg-[#FEEBE4] w-84 p-8 py-12 border border-[#FC437B]  rounded-2xl shadow-2xl ">
-      <p className="text-center text-gray-600 mb-4 font-medium text-base">
-        Enter the OTP send on your <br /> mail id.
-      </p>
-      <h2 className="text-center text-black font-semibold mb-4 text-lg">Enter OTP</h2>
-
-      <div className="flex justify-between mb-6 px-2" onPaste={handlePaste}>
-        {[...Array(6)].map((_, index) => (
-          <input
-            key={index}
-            maxLength="1"
-            type="text"
-            className="w-10 h-12 text-center border-2 border-pink-500 rounded-md text-lg focus:outline-none focus:ring-2 focus:ring-pink-400"
-            ref={(el) => (inputs.current[index] = el)}
-            onChange={(e) => handleInput(e, index)}
-          />
-        ))}
-      </div>
-
-      <button  onClick={handleGetOtp} className="w-full bg-indigo-900 text-white py-2 rounded-xl font-semibold hover:bg-indigo-800 transition duration-300">
-        Confirm OTP
-      </button>
-    </div>
-  );
-};
-
-

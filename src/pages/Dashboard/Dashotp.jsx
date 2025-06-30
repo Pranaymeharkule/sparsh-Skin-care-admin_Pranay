@@ -32,7 +32,7 @@ export default function OTPConfirmPage() {
     // Add your OTP validation logic here
   };
   return (
-    <div className="min-h-screen bg-[#fde7e2] flex flex-col px-8 py-6  relative overflow-hidden">
+    <div className="h-screen md:overflow-hidden overflow-auto bg-[#fde7e2] flex flex-col px-8 py-6 relative">
       {/* Top Row: Logo and Welcome */}
       <div className="flex items-center justify-between mb-8">
         <img src={logo} alt="Sparsh Logo" className="w-16 h-auto" />

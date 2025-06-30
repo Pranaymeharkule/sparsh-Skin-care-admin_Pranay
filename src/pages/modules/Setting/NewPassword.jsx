@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
+
 import UserImg from '../../../assets/user.png';
 import ShieldIcon from '../../../components/icons/SearchIcon';
 import UserIcon from '../../../components/icons/UserIcon';
@@ -7,7 +8,7 @@ import ShowPasswordIcon from '../../../components/icons/ShowPasswordIcon';
 import HidePasswordIcon from '../../../components/icons/HidePasswordIcon';
 import { useNavigate } from 'react-router-dom';
 
-export default function DashboardSetting() {
+export default function NewPassword() {
   return (
     <div className="h-full overflow-auto p-6">
       <div className="flex flex-col md:flex-row justify-between gap-8">
@@ -66,95 +67,92 @@ export default function DashboardSetting() {
         {/* Right: Account & Security */}
         <div className="md:px-8   sm:px-50">
           {/* <PasswordChanger/> */}
-          <PasswordOtp />
+          <PasswordResetForm />
         </div>
       </div>
     </div>
+
+
+
   );
 }
 
 
-function PasswordChanger(){
-  const [showOld, setShowOld] = useState(false);
-  const [showNew, setShowNew] = useState(false);
 
-  return (   <div className="bg-[#FEEBE4] w-84 border border-[#FC437B]  rounded-xl shadow-lg relative">
-          <div className="flex p-6 items-center justify-center border-b">
-            <ShieldIcon className="mx-4 text-black" />
-            <h3 className="font-semibold text-md">Account & Security</h3>
-          </div>
+function PasswordResetForm() {
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
-          <form className="space-y-4 text-left p-3">
-            {/* Old Password Field */}
-            <div className="relative">
-              <label className="block text-sm mb-1">Old Password</label>
-              <input
-                type={showOld ? 'text' : 'password'}
-                className="w-full border-[#FC437B] outline-none text-xl bg-white border rounded-md px-3 py-2 pr-10"
-              />
-              <div
-                onClick={() => setShowOld(!showOld)}
-                className="absolute right-3 top-[35px] cursor-pointer text-gray-600"
-              >
-                {showOld ? <HidePasswordIcon /> : <ShowPasswordIcon />}
-              </div>
-            </div>
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (newPassword !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+    // Handle password reset logic here
+    alert("Password changed successfully!");
+  };
+    
 
-            {/* New Password Field */}
-            <div className="relative">
-              <label className="block text-sm mb-1">New Password</label>
-              <input
-                type={showNew ? 'text' : 'password'}
-                className="w-full border-[#FC437B] outline-none text-xl bg-white border rounded-md px-3 py-2 pr-10"
-              />
-              <div
-                onClick={() => setShowNew(!showNew)}
-                className="absolute right-3 top-[35px] cursor-pointer text-gray-600"
-              >
-                {showNew ? <HidePasswordIcon /> : <ShowPasswordIcon />}
-              </div>
-            </div>
-
-            <div className="text-blue-600 text-sm cursor-pointer">
-              Forgot Password?
-            </div>
-            <button
-              type="submit"
-              className="w-full bg-indigo-900 text-white py-3 rounded-xl text-sm font-semibold"
-            >
-              Done
-            </button>
-          </form>
-        </div>)
-}
-function PasswordOtp(){ 
-      const navigate = useNavigate();
- const handleGetOtp = () => {
+  const handleGetOtp = () => {
     // Simulate sending OTP...
     // Navigate to enter OTP page
-    navigate('/otpemail');
+    navigate('/newpassword');
   };
 
-  const [showOld, setShowOld] = useState(false);
-  const [showNew, setShowNew] = useState(false);
+  return (
+    <div className="bg-[#FEEBE4] w-84 p-8 py-12 border border-[#FC437B]   rounded-2xl shadow-2xl">
+      <h2 className="text-gray-600 font-medium text-lg mb-6">
+        Please enter the New Password
+      </h2>
 
-  return (   <div className="bg-[#FEEBE4] w-84 p-8 py-12 border border-[#FC437B]   rounded-2xl shadow-2xl ">
-         <div className="p-2 "> 
-          <div className="text-center py-4 font-medium text-gray-500 text-">
-            <h1>Enter your mail id to get the OTP</h1>
+      <form onSubmit={handleSubmit} className="space-y-4 text-left">
+        {/* New Password */}
+        <div className="relative">
+          <label className="font-semibold text-sm">New Password</label>
+          <input
+            type={showNewPassword ? 'text' : 'password'}
+            placeholder="Enter New Password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            className="w-full mt-1 px-4 py-2 border-2 border-pink-500 rounded-xl focus:outline-none"
+          />
+          <div
+            className="absolute right-3 top-9 cursor-pointer text-gray-600"
+            onClick={() => setShowNewPassword(!showNewPassword)}
+          >
+            {showNewPassword ? <FiEyeOff /> : <FiEye />}
           </div>
-          <div className="text-left py-2">
-            <label htmlFor="Email" className='font-medium'>Email</label>
-             <input
-                value={""}
-                placeholder='Enter your mail'
-                className="w-full border-[#FC437B] outline-none  bg-white border rounded-md px-3 py-2 pr-10"
-              />
+        </div>
 
+        {/* Confirm Password */}
+        <div className="relative">
+          <label className="font-semibold text-sm">Confirm Password</label>
+          <input
+            type={showConfirmPassword ? 'text' : 'password'}
+            placeholder="Enter confirm password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className="w-full mt-1 px-4 py-2 border-2 border-pink-500 rounded-xl focus:outline-none"
+          />
+          <div
+            className="absolute right-3 top-9 cursor-pointer text-gray-600"
+            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+          >
+            {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
           </div>
-          <button   onClick={handleGetOtp} className='text-center text-white p-3 my-2 rounded-xl w-full bg-[#1E1874]'>Get OTP</button>
+        </div>
 
-         </div>
-
-        </div>)
+        {/* Submit Button */}
+        <button  onClick={handleGetOtp}
+         
+          className="w-full bg-[#1E1874] text-white py-3 mt-2 rounded-xl font-semibold hover:opacity-90"
+        >
+          Save
+        </button>
+      </form>
+    </div>
+  );
 }

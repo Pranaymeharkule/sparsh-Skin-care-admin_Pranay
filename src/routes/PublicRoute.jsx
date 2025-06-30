@@ -21,36 +21,38 @@ import DashboardSetting from '../pages/modules/Setting/Setting.jsx'
 import DashbaordNotification from "../pages/modules/Notification/Notification.jsx";
 import AppointmentDashboard from "../pages/modules/DashboardManger/DashboardManger.jsx";
 import OTPPage from "../pages/modules/Setting/OTPconfirm.jsx";
+import NewPassword from "../pages/modules/Setting/NewPassword.jsx";
+import EditSetting from "../pages/modules/Setting/EditSetting.jsx";
 
 const PublicRoute = () => {
   return (
     <Routes>
       <Route
-        path="/login"
+        path="/"
         element={
-          <Login />
+          <DashboardPage />
         }
       />
       {/* User Management  */}
       <Route
-        path=""
+        path="/login"
         element={
            <DashboardPage /> 
         }
       />
        <Route
-        path="/email"
+        path="/forgot-password"
         element={
            <OTPLoginCard /> 
         }
       />
-      <Route path="/otp"
+      <Route path="/verify-otp"
         element={
            <OTPConfirmPage /> 
         }
       />
        <Route
-        path="/resetpassword"
+        path="/new-password"
         element={
            <PasswordResetPage /> 
         }
@@ -72,6 +74,8 @@ const PublicRoute = () => {
         <Route path="/dashboardnotification" element={<DashbaordNotification />} />
          <Route path="/dashboard" element={<AppointmentDashboard/>} />
             <Route path="/otpemail" element={<OTPPage/>} />
+             <Route path="/newpassword" element={<NewPassword/>} />
+             <Route path="/editsetting" element={<EditSetting/>} />
 
       </Route>
     </Routes>

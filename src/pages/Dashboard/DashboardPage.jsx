@@ -17,7 +17,7 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#fde7e2] flex flex-col px-8 py-6  relative overflow-hidden">
+    <div className="h-screen md:overflow-hidden overflow-auto bg-[#fde7e2] flex flex-col px-8 py-6 relative ">
       {/* Top Row: Logo and Welcome */}
       <div className="flex items-center justify-between mb-8">
         <img src={logo} alt="Sparsh Logo" className="w-16 h-auto" />
@@ -28,7 +28,7 @@ export default function DashboardPage() {
       <div className="flex flex-col  md:flex-row items-center justify-center gap-19 md:gap-">
         {/* Left Illustration */}
         <div className="w-full  md:w-1/2">
-          <img src={img8} alt="Doctor Illustration" className="w-full  " />
+          <img src={img8} alt="Doctor Illustration" className="w-full md:h-[550px]  md:w-[700px]  " />
         </div>
 
 

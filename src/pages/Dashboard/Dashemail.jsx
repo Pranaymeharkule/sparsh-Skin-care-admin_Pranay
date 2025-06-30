@@ -13,7 +13,7 @@ export default function OTPLoginCard() {
     alert(`OTP will be sent to: ${email}`);
   };
   return (
-    <div className="min-h-screen bg-[#fde7e2] flex flex-col px-8 py-6  relative overflow-hidden">
+    <div className="h-screen md:overflow-hidden overflow-auto bg-[#fde7e2] flex flex-col px-8 py-6 relative">
       {/* Top Row: Logo and Welcome */}
       <div className="flex items-center justify-between mb-8">
         <img src={logo} alt="Sparsh Logo" className="w-16 h-auto" />
@@ -23,13 +23,13 @@ export default function OTPLoginCard() {
       {/* Main content */}
       <div className="flex flex-col md:flex-row items-center justify-center gap-19 md:gap-">
         {/* Left Illustration */}
-        <div className="w-full md:w-1/2">
-          <img src={img9} alt="Doctor Illustration" className="w-full " />
+        <div className="w-full  px-8 md:w-[800px]">
+          <img src={img9} alt="Doctor Illustration" className="w-full md:h-[550px]  md:w-[700px] " />
         </div>
 
 
 
- <div className="text-center  flex-1">
+ <div className="text-center text-top-0 flex-1">
 
    <h1 className="text-4xl font-bold md:mr-38  text-gray-900">Forgot Password?</h1>
           <p className="text-gray-600  md:mr-38 mb-9">To the Dashboard of Sparsh Skin Clinic</p>
