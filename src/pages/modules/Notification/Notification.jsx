@@ -1,6 +1,6 @@
 import React from "react";
 import { IoMdNotificationsOutline } from "react-icons/io";
-// import CalendarIcon from "../../../components/icons/CalenderIcon";
+import CalendarIcon from "../../../components/icons/CalenderIcon";
 
 const notifications = [
   {
@@ -35,7 +35,7 @@ const notifications = [
   },
 ];
 
-export default function DashbaordNotification() {
+export default function Notification() {
   return (
     <div className=" w-full p-6 mx-auto">
       <div className="flex  text-left  gap-2 text-xl font-semibold mb-6">
