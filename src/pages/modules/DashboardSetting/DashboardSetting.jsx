@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import UserImg from '../../../assets/user.png';
-import ShieldIcon from '../../../components/icons/SearchIcon';
+import ShieldIcon from '../../../components/icons/SheildIcon';
 import UserIcon from '../../../components/icons/UserIcon';
 import ShowPasswordIcon from '../../../components/icons/ShowPasswordIcon';
 import HidePasswordIcon from '../../../components/icons/HidePasswordIcon';
-import { useNavigate } from 'react-router-dom';
 
 export default function DashboardSetting() {
-
-
   
   return (
     <div className="flex flex-col scroll-auto md:flex-row justify-between gap-6 p-6">
@@ -128,14 +125,7 @@ function PasswordChanger(){
           </form>
         </div>)
 }
-function PasswordOtp(){ 
-      const navigate = useNavigate();
- const handleGetOtp = () => {
-    // Simulate sending OTP...
-    // Navigate to enter OTP page
-    navigate('/otpemail');
-  };
-
+function PasswordOtp(){
   const [showOld, setShowOld] = useState(false);
   const [showNew, setShowNew] = useState(false);
 
@@ -153,7 +143,7 @@ function PasswordOtp(){
               />
 
           </div>
-          <button   onClick={handleGetOtp} className='text-center text-white p-3 my-2 rounded-xl w-full bg-[#1E1874]'>Get OTP</button>
+          <button className='text-center text-white p-3 my-2 rounded-xl w-full bg-[#1E1874]'>Get OTP</button>
 
          </div>
 

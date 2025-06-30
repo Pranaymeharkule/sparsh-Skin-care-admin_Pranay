@@ -1,15 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState , useRef } from 'react';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import UserImg from '../../../assets/user.png';
 import ShieldIcon from '../../../components/icons/SearchIcon';
 import UserIcon from '../../../components/icons/UserIcon';
 import ShowPasswordIcon from '../../../components/icons/ShowPasswordIcon';
 import HidePasswordIcon from '../../../components/icons/HidePasswordIcon';
-import { useNavigate } from 'react-router-dom';
 
-export default function DashboardSetting() {
-
-
+export default function OTPPage() {
   
   return (
     <div className="flex flex-col scroll-auto md:flex-row justify-between gap-6 p-6">
@@ -68,7 +65,7 @@ export default function DashboardSetting() {
       {/* Right: Account & Security */}
       <div className="md:px-8">
      {/* <PasswordChanger/> */}
-     <PasswordOtp/>
+     <Otp/>
       </div>
     </div>
   );
@@ -128,34 +125,59 @@ function PasswordChanger(){
           </form>
         </div>)
 }
-function PasswordOtp(){ 
-      const navigate = useNavigate();
- const handleGetOtp = () => {
-    // Simulate sending OTP...
-    // Navigate to enter OTP page
-    navigate('/otpemail');
+
+
+
+function Otp ()  {
+  const inputs = useRef([]);
+
+  const handleInput = (e, index) => {
+    const value = e.target.value;
+    if (/^[0-9]$/.test(value)) {
+      if (index < 5) {
+        inputs.current[index + 1]?.focus();
+      }
+    } else {
+      e.target.value = '';
+    }
   };
 
-  const [showOld, setShowOld] = useState(false);
-  const [showNew, setShowNew] = useState(false);
+  const handlePaste = (e) => {
+    e.preventDefault();
+    const paste = e.clipboardData.getData('text').slice(0, 6).split('');
+    paste.forEach((char, i) => {
+      if (inputs.current[i]) {
+        inputs.current[i].value = char;
+      }
+    });
+    inputs.current[Math.min(paste.length, 5)]?.focus();
+  };
 
-  return (   <div className="bg-[#FEEBE4] w-84 p-8 py-12 border border-[#FC437B]  rounded-2xl shadow-2xl ">
-         <div className="p-2 "> 
-          <div className="text-center py-4 font-medium text-gray-500 text-">
-            <h1>Enter your mail id to get the OTP</h1>
-          </div>
-          <div className="text-left py-2">
-            <label htmlFor="Email" className='font-medium'>Email</label>
-             <input
-                value={""}
-                placeholder='Enter your mail'
-                className="w-full border-[#FC437B] outline-none  bg-white border rounded-md px-3 py-2 pr-10"
-              />
+  return (
+    <div className="bg-[#FEEBE4] w-84 p-8 py-12 border border-[#FC437B]  rounded-2xl shadow-2xl ">
+      <p className="text-center text-gray-600 mb-4 font-medium text-base">
+        Enter the OTP send on your <br /> mail id.
+      </p>
+      <h2 className="text-center text-black font-semibold mb-4 text-lg">Enter OTP</h2>
 
-          </div>
-          <button   onClick={handleGetOtp} className='text-center text-white p-3 my-2 rounded-xl w-full bg-[#1E1874]'>Get OTP</button>
+      <div className="flex justify-between mb-6 px-2" onPaste={handlePaste}>
+        {[...Array(6)].map((_, index) => (
+          <input
+            key={index}
+            maxLength="1"
+            type="text"
+            className="w-10 h-12 text-center border-2 border-pink-500 rounded-md text-lg focus:outline-none focus:ring-2 focus:ring-pink-400"
+            ref={(el) => (inputs.current[index] = el)}
+            onChange={(e) => handleInput(e, index)}
+          />
+        ))}
+      </div>
 
-         </div>
+      <button className="w-full bg-indigo-900 text-white py-2 rounded-xl font-semibold hover:bg-indigo-800 transition duration-300">
+        Confirm OTP
+      </button>
+    </div>
+  );
+};
 
-        </div>)
-}
+

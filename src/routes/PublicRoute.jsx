@@ -19,6 +19,9 @@ import AppointmentDetails from "../pages/modules/AppointmentDetails/AppointmentD
 import EditAppointmentDetails from "../pages/modules/AppointmentDetails/EditAppointment.jsx";
 import DashboardSetting from '../pages/modules/Setting/Setting.jsx'
 import DashbaordNotification from "../pages/modules/Notification/Notification.jsx";
+import AppointmentDashboard from "../pages/modules/DashboardManger/DashboardManger.jsx";
+import OTPPage from "../pages/modules/Setting/OTPconfirm.jsx";
+
 const PublicRoute = () => {
   return (
     <Routes>
@@ -53,6 +56,7 @@ const PublicRoute = () => {
         }
       />
       <Route path="/" element={<Login />} />
+      
       <Route path="auth/request-otp" element={<RequestOTP  />} />
       <Route path="auth/verify-otp" element={<VerifyOTP  />} />
       <Route path="auth/reset-password" element={<ResetPassword />} />
@@ -64,8 +68,11 @@ const PublicRoute = () => {
         <Route path="/appointments" element={<AppointmentManager />} />
         <Route path="/appointmentdetails" element={<AppointmentDetails />} />
         <Route path="/editappointment" element={<EditAppointmentDetails />} />
-        <Route path="/dashboardsetting" element={<DashboardSetting />} />
+        <Route path="/setting" element={<DashboardSetting />} />
         <Route path="/dashboardnotification" element={<DashbaordNotification />} />
+         <Route path="/dashboard" element={<AppointmentDashboard/>} />
+            <Route path="/otpemail" element={<OTPPage/>} />
+
       </Route>
     </Routes>
   );

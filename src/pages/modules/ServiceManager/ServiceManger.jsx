@@ -3,8 +3,8 @@ import { FiSearch } from "react-icons/fi";
 import { HiOutlineFilter } from "react-icons/hi";
 import { BiEdit } from "react-icons/bi";
 import { TbTrash } from "react-icons/tb";
-// import ServiceManagerIcon from "../../../components/icons/ServiceManagerIcon";
-// import EditIcon from "../../../components/icons/EditIcon";
+import ServiceManagerIcon from "../../../components/icons/ServiceManagerIcon";
+import EditIcon from "../../../components/icons/EditIcon";
 import TrashIcon from "../../../components/icons/TrashIcon";
 
 const services = [
