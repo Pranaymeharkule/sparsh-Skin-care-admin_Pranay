@@ -18,7 +18,7 @@ import AppointmentManager from "../pages/modules/AppointmentManager/AppointmentM
 import AppointmentDetails from "../pages/modules/AppointmentDetails/AppointmentDetails.jsx";
 import EditAppointmentDetails from "../pages/modules/AppointmentDetails/EditAppointment.jsx";
 import DashboardSetting from '../pages/modules/Setting/Setting.jsx'
-import DashbaordNotification from "../pages/modules/Notification/Notification.jsx";
+import Notification from "../pages/modules/Notification/Notification.jsx";
 import AppointmentDashboard from "../pages/modules/DashboardManger/DashboardManger.jsx";
 import OTPPage from "../pages/modules/Setting/OTPconfirm.jsx";
 import NewPassword from "../pages/modules/Setting/NewPassword.jsx";
@@ -71,7 +71,7 @@ const PublicRoute = () => {
         <Route path="/appointmentdetails" element={<AppointmentDetails />} />
         <Route path="/editappointment" element={<EditAppointmentDetails />} />
         <Route path="/setting" element={<DashboardSetting />} />
-        <Route path="/dashboardnotification" element={<DashbaordNotification />} />
+        <Route path="/notification" element={<Notification />} />
          <Route path="/dashboard" element={<AppointmentDashboard/>} />
             <Route path="/otpemail" element={<OTPPage/>} />
              <Route path="/newpassword" element={<NewPassword/>} />

@@ -3,7 +3,7 @@ import userImg from "../../assets/user.png";
 import NotificationIcon from "../../assets/icons/NotificationIcon";
 import { FiMenu } from "react-icons/fi";
 import { FaBars } from "react-icons/fa";
-
+import { Link } from "react-router-dom";
 export default function Header({ onMenuClick }) {
   return (
     <header className="h-20 px-6 pr-6 md:pr-14 bg-gradient-to-r from-[#8C88D1] to-[#716FCD] flex justify-between md:justify-end items-center">
@@ -15,11 +15,12 @@ export default function Header({ onMenuClick }) {
       </button>
       <div className="flex justify-end items-center">
         {/* Notification Icon */}
-        <div className="relative mr-6 text-white">
-          <NotificationIcon className="text-3xl" />
-          <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
-        </div>
-
+        <Link to="/notification">
+  <div className="relative mr-6 text-white cursor-pointer">
+    <NotificationIcon className="text-3xl" />
+    <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
+  </div>
+</Link>
         {/* Profile Info */}
         <div className="flex items-center gap-3">
           {/* Profile Image with Online Dot */}
