@@ -2,10 +2,19 @@ import React, { useState, useRef } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import img10 from "../../assets/Gallery/img10.png"; // Doctor illustration
 import logo from "../../assets/Gallery/logo asarsh.jpg"; // Add your logo image here
+import { useLocation, useNavigate } from "react-router-dom";
+import useFetch from "../../hooks/useFetch";
+import conf from "../../config";
+import { toast } from "react-toastify";
 
 export default function VerifyOTP() {
   const [otp, setOtp] = useState(Array(6).fill(""));
   const inputsRef = useRef([]);
+  const [loading, setLoading] = useState(false);
+  const location = useLocation();
+  const { email } = location.state || {};
+  const [fetchData] = useFetch();
+  const navigate = useNavigate();
 
   const handleChange = (element, index) => {
     const value = element.value.replace(/\D/, ""); // Only digits
@@ -41,10 +50,40 @@ export default function VerifyOTP() {
     }
   };
 
-  const handleConfirmOTP = () => {
-    alert(`Entered OTP: ${otp.join("")}`);
-    // Add your OTP validation logic here
+  const handleConfirmOTP = async () => {
+    if (!email || !otp) {
+      toast.error("Missing email or OTP");
+      return;
+    }
+    setLoading(true);
+
+    try {
+      const res = await fetchData({
+        method: "POST",
+        url: `${conf.apiBaseUrl}/admin/auth/verify-otp`,
+        data: { email, otp: otp.join("") },
+      });
+
+      if (res.success) {
+        toast.success(res.message);
+        navigate("/reset-password", {
+          state: { resetToken: res.resetToken, email },
+        });
+      } else {
+        toast.error(res.message || "OTP Verification Failed.");
+      }
+    } catch (error) {
+      console.error("OTP Confirmation Error:", error);
+      const message =
+        error?.response?.data?.message ||
+        error?.message ||
+        "An unexpected error occurred.";
+      toast.error(message);
+    } finally {
+      setLoading(false);
+    }
   };
+
   return (
     <div className="h-full overflow-x-scroll bg-[#fde7e2] flex flex-col px-8 relative ">
       {/* Top Row: Logo and Welcome */}

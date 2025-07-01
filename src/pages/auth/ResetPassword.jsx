@@ -1,22 +1,49 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 import { Eye, EyeOff } from "lucide-react";
 import img11 from "../../assets/Gallery/img11.png"; // Doctor illustration
 import logo from "../../assets/Gallery/logo asarsh.jpg"; // Add your logo image here
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import conf from "../../config";
+import useFetch from "../../hooks/useFetch";
 
 export default function ResetPassword() {
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("pass@123");
+  const [confirmPassword, setConfirmPassword] = useState("pass@123");
   const [showConfirm, setShowConfirm] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { resetToken, email } = location.state;
+  const [fetchData] = useFetch();
+  console.log(resetToken, email);
 
-  const handleSave = () => {
-    if (newPassword === confirmPassword) {
-      alert("Password reset successful!");
-      // Add API logic here
+  useEffect(() => {
+    if (!resetToken || !email) {
+      toast.error("Invalid access. Please verify OTP again.");
+      navigate("/verify-otp");
+    }
+  }, [resetToken, email]);
+
+  const handleSave = async (e) => {
+     e.preventDefault();
+    if (newPassword !== confirmPassword)
+      toast.error("Password reset successful!");
+
+    const res = await fetchData({
+      method: "POST",
+      url: `${conf.apiBaseUrl}/admin/auth/reset-password`,
+      data: { email, resetToken, newPassword, confirmPassword },
+    });
+
+    if (res.success) {
+      toast.success("Password reset successful");
+      navigate("/login");
     } else {
-      alert("Passwords do not match!");
+      toast.error(res.message || "Failed to reset password");
     }
   };
+
   return (
     <div className="h-full overflow-x-scroll bg-[#fde7e2] flex flex-col px-8 relative ">
       {/* Top Row: Logo and Welcome */}

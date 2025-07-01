@@ -20,6 +20,7 @@ export default function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
+    
     if (!email) {
       toast.error("Enter your email");
       return;

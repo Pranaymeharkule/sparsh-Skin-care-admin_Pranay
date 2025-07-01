@@ -15,21 +15,29 @@ export default function ForgetPassword() {
   const [fetchData] = useFetch();
   const navigate = useNavigate();
 
-  const handleGetOTP = async () => {
-    
+  const handleGetOTP = async (e) => {
+    e.preventDefault();
 
+    if (!email) {
+      toast.error("Enter youe password");
+      return;
+    }
+
+    if (loading) return;
     setLoading(true);
     try {
       const res = await fetchData({
         method: "POST",
         url: `${conf.apiBaseUrl}/admin/auth/forgot-password`,
-        data:{email},
+        data: { email },
       });
 
-      console.log(res); 
+      console.log(res);
       if (res.success) {
         toast.success(res.message);
-        navigate("/verify-otp");
+        navigate("/verify-otp", {
+          state: { email },
+        });
       } else {
         toast.error(res.message);
       }
@@ -74,7 +82,10 @@ export default function ForgetPassword() {
             To the Dashboard of Sparsh Skin Clinic
           </p>
           {/* Login Form */}
-          <div className="bg-[#fceae4] w-full max-w-md p-6 rounded-xl shadow-lg">
+          <form
+            className="bg-[#fceae4] w-full max-w-md p-6 rounded-xl shadow-lg"
+            onSubmit={handleGetOTP}
+          >
             <h2 className="text-xl font-semibold text-center mb-1">
               Sparsh Skin Care Admin
             </h2>
@@ -86,9 +97,7 @@ export default function ForgetPassword() {
             </p>
 
             <div className="space-y-4 text-start">
-             <label className="font-medium ">
-                Email
-              </label>
+              <label className="font-medium ">Email</label>
               <input
                 id="email"
                 type="email"
@@ -100,12 +109,15 @@ export default function ForgetPassword() {
             </div>
 
             <button
-              onClick={handleGetOTP}
-              className="mt-6 w-full bg-indigo-900 text-white py-2 rounded-md font-semibold shadow hover:bg-indigo-800 transition duration-200"
+              type="submit"
+              className={`mt-6 w-full bg-indigo-900 text-white py-2 rounded-md font-semibold shadow hover:bg-indigo-800 transition duration-200 ${
+                loading && "cursor-not-allowed bg-indigo-800"
+              }`}
+              disabled={loading}
             >
               Get OTP
             </button>
-          </div>
+          </form>
         </div>
       </div>
 
