@@ -9,8 +9,8 @@ import { Link } from "react-router-dom";
 
 export default function Login() {
   const [localLoading, setLocalLoading] = useState(false);
-  const [email, setEmail] = useState("mayank@gmail.com");
-  const [password, setPassword] = useState("mayank@123");
+  const [email, setEmail] = useState("mayursanodiya@gmail.com");
+  const [password, setPassword] = useState("pass@123");
   const { role, setRole } = useState("Editor");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);

@@ -26,11 +26,10 @@ export default function ForgetPassword() {
         data:{email},
       });
 
-      console.log(res);
-
+      console.log(res); 
       if (res.success) {
-        toast.error(res.message);
-        // navigate("/dashboard");
+        toast.success(res.message);
+        navigate("/verify-otp");
       } else {
         toast.error(res.message);
       }
