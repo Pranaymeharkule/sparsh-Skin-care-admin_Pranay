@@ -4,7 +4,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        peach: "#FEEBE4",
+        peachLight: "#FEEBE4",
+        customGray: "#7F7D7D",
       },
       fontFamily: {
         poppins: ["Poppins", "sans-serif"],

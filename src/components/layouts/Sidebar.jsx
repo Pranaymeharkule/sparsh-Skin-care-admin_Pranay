@@ -73,17 +73,14 @@ export default function Sidebar({ isOpen, onClose }) {
           </ul>
         </div>
 
-      
-
         {/* Footer */}
-<div className="pb-6">
-  <SidebarItem 
-    icon={<FaCog />} 
-    label="Settings" 
-   onClick={() => navigate("/setting")}
-  />
-</div>
-
+        <div className="pb-6">
+          <SidebarItem
+            icon={<FaCog />}
+            label="Settings"
+            onClick={() => navigate("/setting")}
+          />
+        </div>
       </div>
     </>
   );

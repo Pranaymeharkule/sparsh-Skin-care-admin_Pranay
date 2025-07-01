@@ -10,18 +10,19 @@ const useLogin = () => {
   const [fetchData] = useFetch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const setUserInfo = useSetRecoilState(adminAuthState);
-  const [sAdminResponse, setSAdminResponse] = useState("");
+  const setUserInfo = useSetRecoilState(adminAuthState); 
 
-  const adminLogin = async ({ email, password, rememberMe }) => {
-    const data = { email, password };
+  const adminLogin = async ({ email, password, role, rememberMe }) => {
+    const data = { email, password, role };
     setLoading(true);
     try {
       const res = await fetchData({
         method: "POST",
-        url: `${conf.adminLoginUrl}`,
+        url: `${conf.apiBaseUrl}/admin/auth/login`,
         data,
       });
+
+      console.log(res)
 
       if (res.success) {
         localStorage.removeItem("admin_token");

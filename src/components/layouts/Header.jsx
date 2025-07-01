@@ -16,11 +16,11 @@ export default function Header({ onMenuClick }) {
       <div className="flex justify-end items-center">
         {/* Notification Icon */}
         <Link to="/notification">
-  <div className="relative mr-6 text-white cursor-pointer">
-    <NotificationIcon className="text-3xl" />
-    <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
-  </div>
-</Link>
+          <div className="relative mr-6 text-white cursor-pointer">
+            <NotificationIcon className="text-3xl" />
+            <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
+          </div>
+        </Link>
         {/* Profile Info */}
         <div className="flex items-center gap-3">
           {/* Profile Image with Online Dot */}

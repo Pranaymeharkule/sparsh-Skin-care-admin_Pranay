@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { HiOutlineFilter } from "react-icons/hi";
 import { BiEdit } from "react-icons/bi";
@@ -6,6 +6,9 @@ import { TbTrash } from "react-icons/tb";
 import ServiceManagerIcon from "../../../components/icons/ServiceManagerIcon";
 import EditIcon from "../../../components/icons/EditIcon";
 import TrashIcon from "../../../components/icons/TrashIcon";
+import { toast } from "react-toastify";
+import useFetch from "../../../hooks/useFetch";
+import conf from "../../../config";
 
 const services = [
   "Derma roller for acne scars",
@@ -24,11 +27,46 @@ const services = [
 ];
 
 export default function ServiceManager() {
+  const [categories, setCategories] = useState([]);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState("");
+  const [fetchData] = useFetch();
+
+  useEffect(() => {
+    const fetchBookingOverview = async () => {
+      setLoading(true);
+      setError("");
+
+      try {
+        const res = await fetchData({
+          method: "GET",
+          url: `${conf.apiBaseUrl}/categories`,
+        });
+        
+        if (res.success) {
+          setCategories(res.appointments);
+        } else {
+          toast.error(res.message || "Failed to Categories");
+        }
+      } catch (err) {
+        const message = err.message || "Something went wrong!";
+        toast.error(message);
+        setError(message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBookingOverview();
+  }, [fetchData]);
+
   return (
     <div className="p-4  font-sans  text-sm w-full">
       {/* Header */}
       <div className="flex items-center gap-3 mb-4 text-xl md:text-2xl font-semibold">
-        <span className="text-xl"><ServiceManagerIcon className="text-3xl m-1"/></span>
+        <span className="text-xl">
+          <ServiceManagerIcon className="text-3xl m-1" />
+        </span>
         <h1>Service Manager</h1>
       </div>
 
@@ -75,6 +113,7 @@ export default function ServiceManager() {
                   <EditIcon className="cursor-pointer text-2xl" />
                 </td>
                 <td className="px-8 py-3  text-gray-700">
+                  
                   <TrashIcon className="cursor-pointer text-2xl" />
                 </td>
               </tr>
