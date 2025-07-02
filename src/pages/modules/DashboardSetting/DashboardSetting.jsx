@@ -139,7 +139,7 @@ function PasswordOtp(){
              <input
                 value={""}
                 placeholder='Enter your mail'
-                className="w-full border-[#FC437B] outline-none  bg-white border rounded-md px-3 py-2 pr-10"
+                className="w-full border-[#FC437B] outline-none ya bg-white border rounded-md px-3 py-2 pr-10"
               />
 
           </div>
