@@ -15,8 +15,13 @@ import { toast } from "react-toastify";
 import conf from "../../../config";
 import useFetch from "../../../hooks/useFetch";
 import { formatDateTime } from "../../../utils/formatDateTime";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CancelOverlay from "../../../components/Overlay/CancelOverlay";
+import DynamicTable from "../../../components/table/DynamicTable";
+import { Eye, Pencil, Trash2 } from "lucide-react";
+import JioDocumentIcon from "../../../components/icons/JioDocumentIcon";
+import DoublePageIcon from "../../../components/DoublePageIcon";
+import FilterIcon from "../../../components/icons/FilterIcon";
 
 // const appointments = [
 //   {
@@ -101,6 +106,70 @@ export default function AppointmentDashboard() {
   const [selectedAppoinmentId, setSelectedAppoinmentId] = useState("");
   const [showCancelPopup, setShowCancelPopup] = useState("");
   const [fetchData] = useFetch();
+  const navigate = useNavigate();
+
+  const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("fullName");
+  const limit = 100;
+
+  const columns = [
+    { id: "srNo", label: "Sr. No.", minWidth: 70, align: "center" },
+    { id: "patientName", label: "Patient Name", minWidth: 150 },
+    { id: "appointmentType", label: "Appoint. Type", minWidth: 130 },
+    { id: "contact", label: "Contact", minWidth: 100 },
+    { id: "dateTime", label: "Date & Time", minWidth: 170 },
+    { id: "city", label: "City", minWidth: 120 },
+    { id: "payment", label: "Payment", minWidth: 110 },
+    { id: "action", label: "Action", minWidth: 100, align: "center" },
+  ];
+
+  const rows = appointments.map((appointment, index) => ({
+    id: appointment._id,
+    srNo: String(index + 1).padStart(2, "0"),
+
+    patientName: {
+      render: appointment.patientName || "N/A",
+      sortValue: (appointment.patientName || "").toLowerCase(),
+    },
+
+    appointmentType: {
+      render: appointment.appointmentType || "N/A",
+      sortValue: (appointment.appointmentType || "").toLowerCase(),
+    },
+
+    contact: {
+      render: appointment.contact || "N/A",
+      sortValue: appointment.contact || "",
+    },
+
+    dateTime: {
+      render: appointment.dateTime || "N/A",
+      sortValue: appointment.dateTime || "", // Consider parsing date for accurate sorting
+    },
+
+    city: {
+      render: appointment.city || "N/A",
+      sortValue: (appointment.city || "").toLowerCase(),
+    },
+
+    payment: {
+      render: appointment.payment || "Pending",
+      sortValue: (appointment.payment || "pending").toLowerCase(),
+    },
+
+    action: (
+      <div className="flex gap-3 justify-center">
+        <Trash2
+          className="w-5 h-5 cursor-pointer hover:text-red-600"
+          onClick={() => handleDetele(appointment._id)}
+        />
+        <Eye
+          className="w-5 h-5 cursor-pointer hover:text-indigo-700"
+          onClick={() => navigate(`view/${appointment._id}`)}
+        />
+      </div>
+    ),
+  }));
 
   useEffect(() => {
     const fetchBookingOverview = async () => {
@@ -110,11 +179,11 @@ export default function AppointmentDashboard() {
       try {
         const res = await fetchData({
           method: "GET",
-          url: `${conf.apiBaseUrl}/appointments`,
+          url: `${conf.apiBaseUrl}/appointments/getAllAppointments`,
         });
-
         if (res.success) {
           setAppointments(res.appointments);
+          console.log(res.appointments);
         } else {
           toast.error(res.message || "Failed to Appointments");
         }
@@ -135,8 +204,8 @@ export default function AppointmentDashboard() {
 
     try {
       const res = await fetchData({
-        method: "DELETE",
-        url: `${conf.apiBaseUrl}/appointments/${id}`,
+        method: "PUT",
+        url: `${conf.apiBaseUrl}/appointments/deleteAppointment/${id}`,
       });
 
       if (res.success) {
@@ -153,21 +222,21 @@ export default function AppointmentDashboard() {
   };
 
   const handleDetele = async (id) => {
-    setSelectedAppoinmentId(id); 
+    setSelectedAppoinmentId(id);
     setShowCancelPopup(true);
   };
 
   console.log(appointments);
   return (
-    <div className="p-6">
+    <div className="flex flex-col h-full">
       <PageHeader
         icon={<BellIcon size={30} className="text-xl" />}
         title={"Appointment Dashboard"}
       />
-      <div className="flex items-center justify-between mt-4 text-sm h-10">
+      <div className="flex items-center justify-between gap-2 mb-2 text-sm h-10">
         {/* Left Section */}
         <div className="flex gap-2 h-full">
-          <div className="relative w-full max-w-full h-full">
+          <div className="relative max-w-full h-full">
             <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-xl" />
             <input
               type="text"
@@ -176,73 +245,38 @@ export default function AppointmentDashboard() {
             />
           </div>
           <button className="flex items-center gap-1 px-3 h-full border border-[#a0a0a0] rounded-lg">
-            Filter <FaFilter />
+            Filter <FilterIcon />
           </button>
         </div>
 
         {/* Right Section */}
-        <div className="flex gap-2 h-full">
-          <button className="bg-[#83D15A] text-white px-3 h-full rounded-lg border border-[#6FC451] flex items-center gap-2 text-sm">
-            <FaFileExcel /> Export Excel
+        <div className="flex gap-2 h-full text-[#4F4F4F]">
+          <button className="bg-[#83D15A] px-3 h-full rounded-lg border border-[#6FC451] flex items-center gap-2 text-sm">
+            <JioDocumentIcon className="text-xl" /> Export Excel
           </button>
-          <button className="bg-[#83D15A] text-white px-3 h-full rounded-lg border border-[#6FC451] flex items-center gap-2 text-sm">
-            <FaFilePdf /> Export PDF
+          <button className="bg-[#83D15A] px-3 h-full rounded-lg border border-[#6FC451] flex items-center gap-2 text-sm">
+            <DoublePageIcon className="text-xl" /> Export PDF
           </button>
         </div>
       </div>
 
-      <div className="overflow-x-auto  gap-15 ">
-        <table className="w-full border-collapse text-sm">
-          <thead className=" text-left">
-            <tr>
-              <th className="p-2">Sr. No.</th>
-              <th className="p-2">Patient Name</th>
-              <th className="p-2">Appoint. Type</th>
-              <th className="p-2">Contact</th>
-              <th className="p-2">Date & Time</th>
-              <th className="p-2">City</th>
-              <th className="p-2">Payment</th>
-              <th className="p-2">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {appointments.map((appt, index) => (
-              <tr key={appt.id} className="gap-25 mt-8 mb-8 text-left">
-                <td className="p-2">{String(index + 1).padStart(2, "0")}</td>
-                <td className="p-2">{appt.patientName}</td>
-                <td className="p-2">{appt.type}</td>
-                <td className="p-2">{appt.contact}</td>
-                <td className="p-2">{formatDateTime(appt.date, appt.time)}</td>
-                <td className="p-2">{appt.city}</td>
-                <td className="p-2 text-green-600 font-semibold">
-                  {appt.status}
-                </td>
-                <td className="p-2 flex items-center gap-3 text-xl">
-                  <FaTrash
-                    className="text-gray-400 cursor-pointer hover:text-red-500"
-                    onClick={() => handleDetele(appt._id)}
-                  />
-                  <Link to={`view/${appt._id}`} className="inline-block">
-                    <FaEye className="text-gray-500 bg-white cursor-pointer hover:text-blue-500" />
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="overflow-x-auto">
+        <DynamicTable
+          columns={columns}
+          rows={rows}
+          order={order}
+          orderBy={orderBy}
+          setOrder={setOrder}
+          setOrderBy={setOrderBy}
+          initialPageSize={limit}
+          loading={loading}
+          error={error}
+        />
       </div>
 
-      {/* Pagination */}
-      <div className="mt-4 flex justify-end items-center gap-2 text-sm">
-        <button className="text-gray-400 border px-2 py-1 rounded" disabled>
-          previous
-        </button>
-        <span className="border px-3 py-1 rounded bg-gray-100">01</span>
-        <button className="text-black border px-2 py-1 rounded">Next</button>
-      </div>
       {showCancelPopup && (
         <CancelOverlay
-          onConfirm={()=>handleCancelConfirm(selectedAppoinmentId)}
+          onConfirm={() => handleCancelConfirm(selectedAppoinmentId)}
           onCancel={() => setShowCancelPopup(false)}
           message={"Are you sure you want to Cancel this Appointment?"}
         />

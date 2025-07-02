@@ -3,22 +3,16 @@ import { Link, useParams } from "react-router-dom";
 import useFetch from "../../../hooks/useFetch";
 import conf from "../../../config";
 import { toast } from "react-toastify";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 
 export default function ViewAppoinment() {
   const { id } = useParams();
   const [search, setSearch] = useState("");
-//   const [appointment, setAppointment] = useState([]);
+  //   const [appointment, setAppointment] = useState([]);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState("");
+  const [loading, setLoading] = useState(true);
   const [fetchData] = useFetch();
-  const [appointment, setAppointment] = useState({
-    name: "Rober",
-    contact: "7809-564-984",
-    type: "Skin Treatment",
-    datetime: "15.06.25 , 01.00pm",
-    city: "Nagpur",
-    payment: "Done",
-  });
+  const [appointment, setAppointment] = useState({});
 
   useEffect(() => {
     const fetchBookingOverview = async () => {
@@ -28,11 +22,11 @@ export default function ViewAppoinment() {
       try {
         const res = await fetchData({
           method: "GET",
-          url: `${conf.apiBaseUrl}/appointments/${id}`,
+          url: `${conf.apiBaseUrl}/appointments/getAppointmentById/${id}`,
         });
 
         if (res.success) {
-            console.log(res)
+          console.log(res);
           setAppointment(res.appointment);
         } else {
           toast.error(res.message || "Failed to Appointment Details");
@@ -50,40 +44,60 @@ export default function ViewAppoinment() {
   }, [fetchData]);
 
   return (
-    <div className="w-full h-screen bg-white overflow-hidden">
+    <div className="w-full h-full bg-white ">
       {/* Scrollable content wrapper for sm and md */}
       <div className="h-full overflow-y-auto px-4 sm:px-8 md:px-16 py-8">
         <div className="bg-[#FEEBE4] px-4 py-2 rounded-t-md mb-6">
           <h2 className="text-xl font-semibold text-left">View Appointment</h2>
         </div>
-
-        <form className="space-y-4 pb-16">
-          <InfoRow label="Patient Name" value={appointment.patientName} />
-          <InfoRow label="Contact No." value={appointment.contact} />
-          <InfoRow label="Appt. Type" value={appointment.type || "N/A"} />
-          <InfoRow label="Date & Time" value={appointment.date +", "+ appointment.time} />
-          <InfoRow label="City" value={appointment.city} />
-          <InfoRow label="Payment" value={appointment.status} />
-
-          <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-16 pt-6">
-            <Link to="/appointments">
-            <button
-              type="button"
-              className="border-2 border-[#716FCD] text-black font-semibold py-2 px-6 rounded-md cursor-pointer"
-              >
-              Back
-            </button>
-                </Link>
-            <Link to="/editappointment">
-              <button
-                type="button"
-                className="bg-[#716FCD] text-white font-semibold py-2 px-6 rounded-md cursor-pointer"
-              >
-                Edit
-              </button>
-            </Link>
+        {loading ? (
+          <LoadingSpinner />
+        ) : error ? (
+          <div className="p-4 text-center text-red-500 font-semibold">
+            {error}
           </div>
-        </form>
+        ) : !appointment ? (
+          <div className="p-4 text-center text-gray-500 font-semibold">
+            No Appoinment found.
+          </div>
+        ) : (
+          <form className="space-y-4 pb-16">
+            <InfoRow
+              label="Patient Name"
+              value={appointment.patientName || "N/A"}
+            />
+            <InfoRow label="Contact No." value={appointment.contact || "N/A"} />
+            <InfoRow
+              label="Appt. Type"
+              value={appointment.appointmentType || "N/A"}
+            />
+            <InfoRow
+              label="Date & Time"
+              value={appointment.dateTime || "N/A"}
+            />
+            <InfoRow label="City" value={appointment.city || "N/A"} />
+            <InfoRow label="Payment" value={appointment.payment || "N/A"} />
+
+            <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-16 pt-6">
+              <Link to="/appointments">
+                <button
+                  type="button"
+                  className="border-2 border-[#716FCD] text-black font-semibold py-2 px-6 rounded-md cursor-pointer"
+                >
+                  Back
+                </button>
+              </Link>
+              <Link to="/appointments/edit">
+                <button
+                  type="button"
+                  className="bg-[#716FCD] text-white font-semibold py-2 px-6 rounded-md cursor-pointer"
+                >
+                  Edit
+                </button>
+              </Link>
+            </div>
+          </form>
+        )}
       </div>
     </div>
   );

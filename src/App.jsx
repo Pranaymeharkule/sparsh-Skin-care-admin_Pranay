@@ -13,14 +13,14 @@ import BlockDate from "./pages/modules/BlockDate/BlockDate";
 import ServiceManager from "./pages/modules/ServiceManager/ServiceManger";
 import ViewAppoinment from "./pages/modules/AppointmentManager/ViewAppoinment";
 import AppointmentManager from "./pages/modules/AppointmentManager/AppointmentManager.jsx";
-import AppointmentDetails from "./pages/modules/AppointmentDetails/AppointmentDetails";
-import EditAppointmentDetails from "./pages/modules/AppointmentDetails/EditAppointment";
+import EditAppointmentDetails from "./pages/modules/AppointmentManager/EditAppointment";
 import DashboardSetting from "./pages/modules/Setting/Setting";
 import Notification from "./pages/modules/Notification/Notification";
 import OTPPage from "./pages/modules/Setting/OTPconfirm";
 import NewPassword from "./pages/modules/Setting/NewPassword";
 import EditSetting from "./pages/modules/Setting/EditSetting";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import Dashboard from "./pages/modules/Dashboard/Dashboard.jsx";
 
 function App() {
   return (
@@ -35,7 +35,7 @@ function App() {
 
         <Route element={<ProtectedRoute />}>
           <Route element={<Layout />}>
-            <Route path="/dashboard" element={<AppointmentDashboard />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/content" element={<InquiryManager />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/block-date" element={<BlockDate />} />
@@ -43,17 +43,9 @@ function App() {
             <Route path="appointments">
               <Route index element={<AppointmentManager />} />
               <Route path="view/:id" element={<ViewAppoinment />} />
+              <Route path="edit" element={<EditAppointmentDetails />} />
             </Route>
-
-            <Route
-              path="/appointmentdetails"
-              element={<AppointmentDetails />}
-            />
-            <Route
-              path="/editappointment"
-              element={<EditAppointmentDetails />}
-            />
-
+ 
             <Route path="/setting" element={<DashboardSetting />} />
             <Route path="/notification" element={<Notification />} />
             <Route path="/otpemail" element={<OTPPage />} />

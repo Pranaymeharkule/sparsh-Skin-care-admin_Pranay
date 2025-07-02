@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+import {
+  isValidEmail,
+  isValidPassword,
+} from "../../utils/validator/validator.jsx"; // adjust path as needed
 
 import { Eye, EyeOff } from "lucide-react";
 import img9 from "../../assets/Gallery/img9.png"; // Doctor illustration
@@ -20,6 +24,11 @@ export default function ForgetPassword() {
 
     if (!email) {
       toast.error("Enter youe password");
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      toast.error("Please enter a valid email address");
       return;
     }
 
@@ -54,6 +63,7 @@ export default function ForgetPassword() {
       setLoading(false);
     }
   };
+  
   return (
     <div className="h-full overflow-x-scroll bg-[#fde7e2] flex flex-col px-8 relative ">
       {/* Top Row: Logo and Welcome */}
@@ -100,7 +110,7 @@ export default function ForgetPassword() {
               <label className="font-medium ">Email</label>
               <input
                 id="email"
-                type="email"
+                type="text"
                 placeholder="Enter your mail"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}

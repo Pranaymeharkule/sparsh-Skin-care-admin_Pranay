@@ -5,6 +5,7 @@ import { PageHeader } from "../../../components/common/PageHeader";
 import DownIcon from "../../../components/icons/DownIcon";
 import SearchIcon from "../../../components/icons/SearchIcon";
 import useFetch from "../../../hooks/useFetch"; // Adjust path if different
+import conf from "../../../config";
 
 const InquiryManager = () => {
   const [inquiries, setInquiries] = useState([]);
@@ -13,68 +14,69 @@ const InquiryManager = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-const [fetchData] = useFetch();
+  const [fetchData] = useFetch();
 
-useEffect(() => {
-  fetchInquiries();
-   fetchStatusCounts();
-}, []);
+  useEffect(() => {
+    fetchInquiries();
+    fetchStatusCounts();
+  }, []);
 
-const fetchInquiries = async () => {
-  try {
-    const response = await fetchData({
-      method: "GET",
-      url: "https://dr-website-backend.onrender.com/api/v1/contactInquiry",
-    });
+  const fetchInquiries = async () => {
+    try {
+      const response = await fetchData({
+        method: "GET",
+        url: `${conf.apiBaseUrl}/contactInquiry`,
+      });
 
-    console.log("API response:", response);
-    setInquiries(response.inquiries);
-    setLoading(false);
-  } catch (error) {
-    console.error("Failed to fetch inquiries:", error);
-    setError("Failed to load inquiries.");
-    setLoading(false);
-  }
-};
+      console.log("API response:", response);
+      setInquiries(response.inquiries);
+      setLoading(false);
+    } catch (error) {
+      console.error("Failed to fetch inquiries:", error);
+      setError("Failed to load inquiries.");
+      setLoading(false);
+    }
+  };
 
   // Filtered data based on search and status
- const filteredInquiries = Array.isArray(inquiries)
-  ? inquiries.filter((item) => {
-      const name = item?.fullName?.toLowerCase() || "";
-      const status = item?.status || "";
+  const filteredInquiries = Array.isArray(inquiries)
+    ? inquiries.filter((item) => {
+        const name = item?.fullName?.toLowerCase() || "";
+        const status = item?.status || "";
 
-      const matchSearch = name.includes(searchTerm.trim().toLowerCase());
-      const matchStatus =
-        statusFilter === "All Status" || status === statusFilter;
+        const matchSearch = name.includes(searchTerm.trim().toLowerCase());
+        const matchStatus =
+          statusFilter === "All Status" || status === statusFilter;
 
-      return matchSearch && matchStatus;
-    })
-  : [];
+        return matchSearch && matchStatus;
+      })
+    : [];
 
   // Count inquiries by status
- 
-const [statusCounts, setStatusCounts] = useState({
-  Pending: 0,
-  New: 0,
-  Replied: 0,
-});
-const  fetchStatusCounts = async () => {
-  try {
-    const response = await fetchData({
-      method: "GET",
-      url: " https://dr-website-backend.onrender.com/api/v1/contactInquiry/count",
-    });
 
-    console.log("API response:", response);
-    setStatusCounts(response.counts);
-    console.log("status:", statusCounts)
-    setLoading(false);
-  } catch (error) {
-    console.error("Failed to fetch inquiries:", error);
-    setError("Failed to load inquiries.");
-    setLoading(false);
-  }
-};
+  const [statusCounts, setStatusCounts] = useState({
+    Pending: 0,
+    New: 0,
+    Replied: 0,
+  });
+
+  const fetchStatusCounts = async () => {
+    try {
+      const response = await fetchData({
+        method: "GET",
+        url: `${conf.apiBaseUrl}/contactInquiry/count`,
+      });
+
+      console.log("API response:", response);
+      setStatusCounts(response.counts);
+      console.log("status:", statusCounts);
+      setLoading(false);
+    } catch (error) {
+      console.error("Failed to fetch inquiries:", error);
+      setError("Failed to load inquiries.");
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-col h-full max-w-[56rem]">
@@ -85,25 +87,25 @@ const  fetchStatusCounts = async () => {
 
       {/* Status Cards */}
       <div className="flex gap-4">
-  <StatusCard
-    label="Pending"
-    count={statusCounts.Pending}
-    bg="#FEEBE4"
-    border="#FFCACA"
-  />
-  <StatusCard
-    label="New"
-    count={statusCounts.New}
-    bg="#FFF5D3"
-    border="#FFE08F"
-  />
-  <StatusCard
-    label="Replied"
-    count={statusCounts.Replied}
-    bg="#D8FFA2"
-    border="#C8FF7D"
-  />
-</div>
+        <StatusCard
+          label="Pending"
+          count={statusCounts.Pending}
+          bg="#FEEBE4"
+          border="#FFCACA"
+        />
+        <StatusCard
+          label="New"
+          count={statusCounts.New}
+          bg="#FFF5D3"
+          border="#FFE08F"
+        />
+        <StatusCard
+          label="Replied"
+          count={statusCounts.Replied}
+          bg="#D8FFA2"
+          border="#C8FF7D"
+        />
+      </div>
 
       {/* Search & Filter */}
       <div className="flex items-center gap-8 mt-4 text-sm">
@@ -141,7 +143,6 @@ const  fetchStatusCounts = async () => {
           <p className="text-red-500 text-center mt-6">{error}</p>
         ) : filteredInquiries.length > 0 ? (
           filteredInquiries.map((item, idx) => (
-            
             <InquiryCard inquiry={item} key={idx} />
           ))
         ) : (

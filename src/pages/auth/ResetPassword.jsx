@@ -1,12 +1,13 @@
-import React, { useState, useRef, useEffect } from "react";
-
+import React, { useState, useEffect } from "react";
+ 
 import { Eye, EyeOff } from "lucide-react";
-import img11 from "../../assets/Gallery/img11.png"; // Doctor illustration
-import logo from "../../assets/Gallery/logo asarsh.jpg"; // Add your logo image here
+import img11 from "../../assets/Gallery/img11.png";
+import logo from "../../assets/Gallery/logo asarsh.jpg";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import conf from "../../config";
 import useFetch from "../../hooks/useFetch";
+import { isValidPassword } from "../../utils/validator/validator";
 
 export default function ResetPassword() {
   const [newPassword, setNewPassword] = useState("pass@123");
@@ -26,9 +27,26 @@ export default function ResetPassword() {
   }, [resetToken, email]);
 
   const handleSave = async (e) => {
-     e.preventDefault();
-    if (newPassword !== confirmPassword)
-      toast.error("Password reset successful!");
+    e.preventDefault();
+
+    if (!newPassword) {
+      toast.error("Password is required");
+      return;
+    }
+
+    if (!confirmPassword) {
+      toast.error("Password is required");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      toast.error("Password not match!");
+      return;
+    } 
+    if (![newPassword, confirmPassword].every(isValidPassword)) {
+      toast.error("Please enter a strong password");
+      return;
+    }
 
     const res = await fetchData({
       method: "POST",

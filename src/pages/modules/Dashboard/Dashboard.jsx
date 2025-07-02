@@ -63,7 +63,7 @@ const DashboardCard = ({ title, value, subtitle, highlight }) => (
   </div>
 );
 
-export default function AppointmentDashboard() {
+export default function Dashboard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
@@ -144,10 +144,10 @@ export default function AppointmentDashboard() {
     },
 
     action: (
-      <div className="flex gap-2 ">
-        <Eye className="w-4 h-4 cursor-pointer" />
-        <Pencil className="w-4 h-4 cursor-pointer" />
-        <Trash2 className="w-4 h-4 cursor-pointer" />
+      <div className="flex gap-3 justify-center">
+        <Eye className="w-5 h-5 cursor-pointer" />
+        <Pencil className="w-5 h-5 cursor-pointer" />
+        <Trash2 className="w-5 h-5 cursor-pointer" />
       </div>
     ),
   }));
@@ -201,6 +201,7 @@ export default function AppointmentDashboard() {
 
       {/* Table */}
       <div className="overflow-x-auto">
+        
         <DynamicTable
           columns={columns}
           rows={rows}

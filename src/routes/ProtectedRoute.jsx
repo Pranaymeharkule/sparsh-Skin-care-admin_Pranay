@@ -10,9 +10,9 @@ const ProtectedRoute = () => {
     localStorage.getItem("admin_token") ||
     sessionStorage.getItem("admin_token");
 
-  if (!token || !isAuthenticated) {
-    return <Navigate to="/" />;
-  }
+  // if (!token || !isAuthenticated) {
+  //   return <Navigate to="/" />;
+  // }
 
   return <Outlet />;
 };
