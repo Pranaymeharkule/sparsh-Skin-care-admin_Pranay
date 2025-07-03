@@ -18,7 +18,7 @@ const useLogin = () => {
     try {
       const res = await fetchData({
         method: "POST",
-        url: `${conf.apiBaseUrl}/admin/auth/login`,
+        url: `${conf.apiBaseUrl}/admin/login`,
         data,
       });
 
