@@ -21,6 +21,7 @@ import NewPassword from "./pages/modules/Setting/NewPassword";
 import EditSetting from "./pages/modules/Setting/EditSetting";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Dashboard from "./pages/modules/Dashboard/Dashboard.jsx";
+import PaymentManager from "./pages/modules/PaymentManager/PaymentManager.jsx";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/block-date" element={<BlockDate />} />
             <Route path="/services" element={<ServiceManager />} />
+            <Route path="/payments" element={<PaymentManager />} />
             <Route path="appointments">
               <Route index element={<AppointmentManager />} />
               <Route path="view/:id" element={<ViewAppoinment />} />
