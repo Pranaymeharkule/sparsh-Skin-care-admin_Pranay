@@ -1,35 +1,34 @@
 import React from "react";
-import {
-  FaHome,
-  FaCalendarAlt,
-  FaCog,
-  FaImage,
-  FaMoneyCheckAlt,
-  FaThList,
-  FaFileAlt,
-} from "react-icons/fa";
+
 
 import logo from "../../assets/logo.svg";
-import { PiSealWarningLight } from "react-icons/pi";
 import { useLocation, useNavigate } from "react-router-dom";
+import HomeIcon from "../icons/sidebar/HomeIcon";
+import BellIcon from "../icons/sidebar/BellIcon";
+import SparkleIcon from "../icons/sidebar/Sparkle";
+import HomeContentIcon from "../icons/sidebar/HomecontentIcon";
+import GalleryIcon from "../icons/sidebar/GalleryIcon";
+import WalletIcon from "../icons/sidebar/WalletIcon";
+import CalendarIcon from "../icons/sidebar/CalendarIcon";
+import SettingIcon from "../icons/sidebar/SettingIcon";
 
 export default function Sidebar({ isOpen, onClose }) {
   const location = useLocation();
   const navigate = useNavigate();
 
   const navItems = [
-    { icon: <FaHome />, label: "Dashboard", path: "/dashboard" },
+    { icon: <HomeIcon />, label: "Dashboard", path: "/dashboard" },
     {
-      icon: <FaCalendarAlt />,
+      icon: <BellIcon />,
       label: "Appointment Manager",
       path: "/appointments",
     },
-    { icon: <FaThList />, label: "Service Manager", path: "/services" },
-    { icon: <FaFileAlt />, label: "Content Manager", path: "/content" },
-    { icon: <FaImage />, label: "Gallery Manager", path: "/gallery" },
-    { icon: <FaMoneyCheckAlt />, label: "Payment Manager", path: "/payments" },
+    { icon: <SparkleIcon />, label: "Service Manager", path: "/services" },
+    { icon: <HomeContentIcon />, label: "Content Manager", path: "/content" },
+    { icon: <GalleryIcon />, label: "Gallery Manager", path: "/gallery" },
+    { icon: <WalletIcon />, label: "Payment Manager", path: "/payments" },
     {
-      icon: <PiSealWarningLight size={20} />,
+      icon: <CalendarIcon />,
       label: "Block the Date",
       path: "/block-date",
     },
@@ -76,7 +75,7 @@ export default function Sidebar({ isOpen, onClose }) {
         {/* Footer */}
         <div className="pb-6">
           <SidebarItem
-            icon={<FaCog />}
+            icon={<SettingIcon />}
             label="Settings"
             onClick={() => navigate("/setting")}
           />
