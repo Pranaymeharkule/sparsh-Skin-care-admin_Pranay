@@ -122,7 +122,7 @@ const appointmentss = [
 
 export default function PaymentManager() {
   const [search, setSearch] = useState("");
-  const [appointments, setAppointments] = useState(appointmentss);
+  const [payments, setPayments] = useState(appointmentss);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [selectedAppoinmentId, setSelectedAppoinmentId] = useState("");
@@ -140,22 +140,22 @@ const columns = [
   { id: "contact", label: "Contact" },
   { id: "dateTime", label: "Date & Time" },
   { id: "city", label: "City" },
-  { id: "payment", label: "Payment Source" },
-  { id: "paymentType", label: "TRN/ Trf. ID" },
+  { id: "paymentSource", label: "Payment Source" },
+  { id: "trId", label: "TRN/ Trf. ID" },
   { id: "fees", label: "Fees" },
   { id: "action", label: "Action", align: "center" },
 ];
 
 
-const rows = appointments.map((appointment, index) => ({
+const rows = payments.map((appointment, index) => ({
   id: appointment._id,
   srNo: String(index + 1).padStart(2, "0"),
   patientName: { render: appointment.name },
   contact: { render: appointment.contact },
   dateTime: { render: appointment.datetime },
   city: { render: appointment.city },
-  payment: { render: appointment.paymentMethod || "UPI" },
-  paymentType: { render: appointment.transactionId || "1245–5648–1154" },
+  paymentSource: { render: appointment.paymentMethod || "UPI" },
+  trId: { render: appointment.transactionId || "1245–5648–1154" },
   fees: { render: `₹ ${appointment.fee || 250}` },
   action: {
     render: (
@@ -166,62 +166,6 @@ const rows = appointments.map((appointment, index) => ({
   },
 }));
 
-  useEffect(() => {
-    const fetchBookingOverview = async () => {
-      setLoading(true);
-      setError("");
-
-      try {
-        const res = await fetchData({
-          method: "GET",
-          url: `${conf.apiBaseUrl}/appointments/getAllAppointments`,
-        });
-        if (res.success) {
-          setAppointments(res.appointments);
-          console.log(res.appointments);
-        } else {
-          toast.error(res.message || "Failed to Appointments");
-        }
-      } catch (err) {
-        const message = err.message || "Something went wrong!";
-        toast.error(message);
-        setError(message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBookingOverview();
-  }, [fetchData]);
-
-  const handleCancelConfirm = async (id) => {
-    if (!id) return;
-
-    try {
-      const res = await fetchData({
-        method: "PUT",
-        url: `${conf.apiBaseUrl}/appointments/deleteAppointment/${id}`,
-      });
-
-      if (res.success) {
-        toast.success("Appointment cancelled successfully!");
-      } else {
-        toast.error(res.message || "Failed to cancel appointment.");
-      }
-    } catch (err) {
-      const message = err.message || "Something went wrong!";
-      toast.error(message);
-    } finally {
-      setShowCancelPopup(false);
-    }
-  };
-
-  const handleDetele = async (id) => {
-    setSelectedAppoinmentId(id);
-    setShowCancelPopup(true);
-  };
-
-  console.log(appointments);
   return (
     <div className="flex flex-col h-full">
       <PageHeader
@@ -271,7 +215,7 @@ const rows = appointments.map((appointment, index) => ({
 
       {showCancelPopup && (
         <CancelOverlay
-          onConfirm={() => handleCancelConfirm(selectedAppoinmentId)}
+          // onConfirm={() => handleCancelConfirm(selectedAppoinmentId)}
           onCancel={() => setShowCancelPopup(false)}
           message={"Are you sure you want to Cancel this Appointment?"}
         />

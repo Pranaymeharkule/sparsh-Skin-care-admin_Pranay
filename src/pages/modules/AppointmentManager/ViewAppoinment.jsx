@@ -4,6 +4,7 @@ import useFetch from "../../../hooks/useFetch";
 import conf from "../../../config";
 import { toast } from "react-toastify";
 import LoadingSpinner from "../../../components/LoadingSpinner";
+import { PageHeader } from "../../../components/common/PageHeader";
 
 export default function ViewAppoinment() {
   const { id } = useParams();
@@ -44,61 +45,57 @@ export default function ViewAppoinment() {
   }, [fetchData]);
 
   return (
-    <div className="w-full h-full bg-white ">
+    <div className="flex flex-col h-full overflow-y-scroll">
       {/* Scrollable content wrapper for sm and md */}
-      <div className="h-full overflow-y-auto px-4 sm:px-8 md:px-16 py-8">
-        <div className="bg-[#FEEBE4] px-4 py-2 rounded-t-md mb-6">
-          <h2 className="text-xl font-semibold text-left">View Appointment</h2>
-        </div>
-        {loading ? (
-          <LoadingSpinner />
-        ) : error ? (
-          <div className="p-4 text-center text-red-500 font-semibold">
-            {error}
-          </div>
-        ) : !appointment ? (
-          <div className="p-4 text-center text-gray-500 font-semibold">
-            No Appoinment found.
-          </div>
-        ) : (
-          <form className="space-y-4 pb-16">
-            <InfoRow
-              label="Patient Name"
-              value={appointment.patientName || "N/A"}
-            />
-            <InfoRow label="Contact No." value={appointment.contact || "N/A"} />
-            <InfoRow
-              label="Appt. Type"
-              value={appointment.appointmentType || "N/A"}
-            />
-            <InfoRow
-              label="Date & Time"
-              value={appointment.dateTime || "N/A"}
-            />
-            <InfoRow label="City" value={appointment.city || "N/A"} />
-            <InfoRow label="Payment" value={appointment.payment || "N/A"} />
 
-            <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-16 pt-6">
-              <Link to="/appointments">
-                <button
-                  type="button"
-                  className="border-2 border-[#716FCD] text-black font-semibold py-2 px-6 rounded-md cursor-pointer"
-                >
-                  Back
-                </button>
-              </Link>
-              <Link to="/appointments/edit">
-                <button
-                  type="button"
-                  className="bg-[#716FCD] text-white font-semibold py-2 px-6 rounded-md cursor-pointer"
-                >
-                  Edit
-                </button>
-              </Link>
-            </div>
-          </form>
-        )}
+      <div className="bg-[#FEEBE4] px-4 py-2 rounded-t-md my-6">
+        <h2 className="text-2xl font-semibold text-left">View Appointment</h2>
       </div>
+      {loading ? (
+        <LoadingSpinner />
+      ) : error ? (
+        <div className="p-4 text-center text-red-500 font-semibold">
+          {error}
+        </div>
+      ) : !appointment ? (
+        <div className="p-4 text-center text-gray-500 font-semibold">
+          No Appoinment found.
+        </div>
+      ) : (
+        <form className="space-y-4 pb-16">
+          <InfoRow
+            label="Patient Name"
+            value={appointment.patientName || "N/A"}
+          />
+          <InfoRow label="Contact No." value={appointment.contact || "N/A"} />
+          <InfoRow
+            label="Appt. Type"
+            value={appointment.appointmentType || "N/A"}
+          />
+          <InfoRow label="Date & Time" value={appointment.dateTime || "N/A"} />
+          <InfoRow label="City" value={appointment.city || "N/A"} />
+          <InfoRow label="Payment" value={appointment.payment || "N/A"} />
+
+          <div className="flex flex-row justify-center gap-4 sm:gap-16 pt-6">
+            <Link to="/appointments">
+              <button
+                type="button"
+                className="border-2 border-[#716FCD] text-black font-semibold py-2 px-6 rounded-md cursor-pointer"
+              >
+                Back
+              </button>
+            </Link>
+            <Link to="/appointments/edit">
+              <button
+                type="button"
+                className="bg-[#716FCD] text-white font-semibold py-2 px-6 rounded-md cursor-pointer h-full"
+              >
+                Edit
+              </button>
+            </Link>
+          </div>
+        </form>
+      )}
     </div>
   );
 }
