@@ -69,7 +69,12 @@ export default function Dashboard() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
-  const [stats, setStats] = useState({});
+  const [stats, setStats] = useState({
+    totalAppointments: 0,
+    groupAppointments: 0,
+    nagpurUpcoming: 0,
+    percentageChange: 0,
+  });
   const [fetchData] = useFetch();
 
   const [order, setOrder] = useState("asc");
@@ -103,7 +108,7 @@ export default function Dashboard() {
 
     fetchBookingOverview();
   }, [fetchData]);
-   
+
   const columns = [
     { id: "srNo", label: "Sr. No.", minWidth: 70, align: "center" },
     { id: "patientName", label: "Patient Name", minWidth: 150 },
@@ -201,7 +206,6 @@ export default function Dashboard() {
 
       {/* Table */}
       <div className="overflow-x-auto">
-        
         <DynamicTable
           columns={columns}
           rows={rows}
