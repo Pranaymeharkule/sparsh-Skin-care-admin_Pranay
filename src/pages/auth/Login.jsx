@@ -2,7 +2,7 @@ import { useState } from "react";
 import React from "react";
 import { Eye, EyeOff } from "lucide-react";
 import img8 from "../../assets/Gallery/img8.png"; // Doctor illustration
-import logo from "../../assets/Gallery/logo asarsh.jpg"; // Add your logo image here
+import logo from "../../assets/Gallery/logo asarsh.jpg"; // Logo image
 import useLogin from "../../hooks/auth/useLogin";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -11,7 +11,7 @@ export default function Login() {
   const [localLoading, setLocalLoading] = useState(false);
   const [email, setEmail] = useState("mayursanodiya@gmail.com");
   const [password, setPassword] = useState("pass@123");
-  const { role, setRole } = useState("Editor");
+  const [role, setRole] = useState("Editor"); // ✅ fixed destructuring
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const { adminLogin, loading } = useLogin();
@@ -20,7 +20,6 @@ export default function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    
     if (!email) {
       toast.error("Enter your email");
       return;
@@ -30,13 +29,13 @@ export default function Login() {
 
   return (
     <div className="h-full overflow-x-scroll bg-[#fde7e2] flex flex-col px-8 relative ">
-      {/* Top Row: Logo and Welcome */}
+      {/* Top Row: Logo */}
       <div className="flex items-center justify-between my-4">
         <img src={logo} alt="Sparsh Logo" className="w-16 h-auto" />
       </div>
 
       {/* Main content */}
-      <div className=" grid grid-cols-1 md:grid-cols-2 gap-6 items-center justify-center lg:px-10 flex-1">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center justify-center lg:px-10 flex-1">
         {/* Left Illustration */}
         <div className="relative overflow-visible">
           <div className="flex items-center overflow-x-visible overflow-y-hidden h-full">
@@ -48,7 +47,7 @@ export default function Login() {
           </div>
         </div>
 
-        {/* Right Form Section */}
+        {/* Right Form */}
         <div className="flex flex-col items-center w-full px-4">
           <h1 className="text-4xl md:text-5xl font-bold mb-2">Welcome</h1>
           <p className="text-gray-600 mb-6">
@@ -59,14 +58,14 @@ export default function Login() {
             <h2 className="text-xl font-semibold mb-1">
               Sparsh Skin Care Admin
             </h2>
-            <p className=" text-gray-500 text-sm mb-6">
+            <p className="text-gray-500 text-sm mb-6">
               Security Administration Access
             </p>
 
             <form className="space-y-4 text-start" onSubmit={handleLogin}>
               {/* Email */}
               <div>
-                <label className="block font-medium ">Email Address</label>
+                <label className="block font-medium">Email Address</label>
                 <input
                   type="email"
                   value={email}
@@ -78,7 +77,7 @@ export default function Login() {
 
               {/* Password */}
               <div>
-                <label className="font-medium ">Password</label>
+                <label className="font-medium">Password</label>
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
@@ -90,7 +89,7 @@ export default function Login() {
                   <button
                     type="button"
                     onClick={togglePassword}
-                    className="absolute right-3 top-3.5 "
+                    className="absolute right-3 top-3.5"
                   >
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
@@ -133,9 +132,10 @@ export default function Login() {
               {/* Login Button */}
               <button
                 type="submit"
-                className="w-full bg-indigo-900 text-white py-2 rounded-md hover:bg-indigo-800 transition font-medium "
+                className="w-full bg-indigo-900 text-white py-2 rounded-md hover:bg-indigo-800 transition font-medium"
+                disabled={loading}
               >
-                Log In
+                {loading ? "Logging in..." : "Log In"}
               </button>
             </form>
           </div>
@@ -144,7 +144,7 @@ export default function Login() {
 
       {/* Decorative Circles */}
       <div className="absolute top-0 right-0 w-80 h-100 bg-[#8584D4] rounded-full translate-x-1/2 -translate-y-1/2"></div>
-      <div className="absolute -bottom-15 right-0 w-40 h-40 bg-[#8584D4] rounded-full  z-10"></div>
+      <div className="absolute -bottom-15 right-0 w-40 h-40 bg-[#8584D4] rounded-full z-10"></div>
     </div>
   );
 }
