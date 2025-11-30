@@ -35,11 +35,12 @@ export default function ForgetPassword() {
     if (loading) return;
     setLoading(true);
     try {
-      const res = await fetchData({
-        method: "POST",
-        url: `${conf.apiBaseUrl}/admin/auth/forgot-password`,
-        data: { email },
-      });
+     const res = await fetchData({
+  method: "POST",
+url: `${conf.apiBaseUrl}/forgot-password`,
+  data: { email },
+});
+
 
       console.log(res);
       if (res.success) {

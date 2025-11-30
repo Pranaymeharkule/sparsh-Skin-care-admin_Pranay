@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
- 
+import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import img11 from "../../assets/Gallery/img11.png";
 import logo from "../../assets/Gallery/logo asarsh.jpg";
@@ -10,39 +9,35 @@ import useFetch from "../../hooks/useFetch";
 import { isValidPassword } from "../../utils/validator/validator";
 
 export default function ResetPassword() {
-  const [newPassword, setNewPassword] = useState("pass@123");
-  const [confirmPassword, setConfirmPassword] = useState("pass@123");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
+
   const location = useLocation();
   const navigate = useNavigate();
-  const { resetToken, email } = location.state;
-  const [fetchData] = useFetch();
-  console.log(resetToken, email);
+  const { email, resetToken } = location.state || {};
 
-  useEffect(() => {
-    if (!resetToken || !email) {
-      toast.error("Invalid access. Please verify OTP again.");
-      navigate("/verify-otp");
-    }
-  }, [resetToken, email]);
+  const [fetchData] = useFetch();
+
+  // Prevent direct access
+  if (!email || !resetToken) {
+    toast.error("Invalid access. Please verify OTP again.");
+    navigate("/forgot-password");
+  }
 
   const handleSave = async (e) => {
     e.preventDefault();
 
-    if (!newPassword) {
-      toast.error("Password is required");
-      return;
-    }
-
-    if (!confirmPassword) {
+    if (!newPassword || !confirmPassword) {
       toast.error("Password is required");
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      toast.error("Password not match!");
+      toast.error("Passwords do not match");
       return;
-    } 
+    }
+
     if (![newPassword, confirmPassword].every(isValidPassword)) {
       toast.error("Please enter a strong password");
       return;
@@ -50,12 +45,12 @@ export default function ResetPassword() {
 
     const res = await fetchData({
       method: "POST",
-      url: `${conf.apiBaseUrl}/admin/auth/reset-password`,
+url: `${conf.apiBaseUrl}/reset-password`,
       data: { email, resetToken, newPassword, confirmPassword },
     });
 
     if (res.success) {
-      toast.success("Password reset successful");
+      toast.success("Password reset successfully!");
       navigate("/login");
     } else {
       toast.error(res.message || "Failed to reset password");
@@ -64,22 +59,13 @@ export default function ResetPassword() {
 
   return (
     <div className="h-full overflow-x-scroll bg-[#fde7e2] flex flex-col px-8 relative ">
-      {/* Top Row: Logo and Welcome */}
       <div className="flex items-center justify-between my-4">
         <img src={logo} alt="Sparsh Logo" className="w-16 h-auto" />
       </div>
 
-      {/* Main content */}
-      <div className=" grid grid-cols-1 md:grid-cols-2 gap-6 items-center justify-center lg:px-10 flex-1">
-        {/* Left Illustration */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center justify-center lg:px-10 flex-1">
         <div className="relative overflow-visible">
-          <div className="flex items-center overflow-x-visible overflow-y-hidden h-full">
-            <img
-              src={img11}
-              alt="Doctor Illustration"
-              className="h-auto max-h-full object-cover mx-auto"
-            />
-          </div>
+          <img src={img11} alt="Doctor Illustration" className="mx-auto max-h-full" />
         </div>
 
         <div className="flex flex-col items-center w-full px-4">
@@ -87,40 +73,35 @@ export default function ResetPassword() {
           <p className="text-gray-600 mb-6">Generate a new password</p>
 
           <div className="bg-[#fceae4] w-full max-w-md p-6 rounded-xl shadow-lg">
-            <h2 className="text-xl font-semibold mb-1">
-              Sparsh Skin Care Admin
-            </h2>
-            <p className=" text-gray-500 text-sm mb-6">
-              Security Administration Access
-            </p>
+            <h2 className="text-xl font-semibold mb-1">Sparsh Skin Care Admin</h2>
+            <p className="text-gray-500 text-sm mb-6">Security Administration Access</p>
 
-            {/* Form */}
-            <form className="space-y-4 text-start">
+            <form className="space-y-4" onSubmit={handleSave}>
               <div>
-                <label className="block font-medium ">New Password</label>
+                <label className="block font-medium">New Password</label>
                 <input
                   type="password"
                   placeholder="Enter New Password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400"
                 />
               </div>
 
               <div>
-                <label className="block font-medium ">Confirm Password</label>
+                <label className="block font-medium">Confirm Password</label>
                 <div className="relative">
                   <input
                     type={showConfirm ? "text" : "password"}
-                    placeholder="Enter confirm password"
+                    placeholder="Confirm Password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md pr-10 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md pr-10 focus:ring-2 focus:ring-blue-400"
                   />
                   <button
                     type="button"
                     onClick={() => setShowConfirm(!showConfirm)}
-                    className="absolute right-3 top-3.5 "
+                    className="absolute right-3 top-3.5"
                   >
                     {showConfirm ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
@@ -128,8 +109,8 @@ export default function ResetPassword() {
               </div>
 
               <button
-                onClick={handleSave}
-                className="mt-6 w-full bg-indigo-900 text-white py-2 rounded-md font-semibold shadow hover:bg-indigo-800 transition duration-200"
+                type="submit"
+                className="w-full bg-indigo-900 text-white py-2 rounded-md hover:bg-indigo-800 transition"
               >
                 Save
               </button>
@@ -137,10 +118,6 @@ export default function ResetPassword() {
           </div>
         </div>
       </div>
-
-      {/* Decorative Circles */}
-      {/* <div className="absolute top-0 right-0 w-80 h-100 bg-purple-800 rounded-full opacity-40 translate-x-1/2 -translate-y-1/2"></div>
-      <div className="absolute bottom-0 right-0 w-40 h-40 bg-purple-800 rounded-full opacity-40 -translate-x-1/2 translate-y-1/2"></div> */}
     </div>
   );
 }

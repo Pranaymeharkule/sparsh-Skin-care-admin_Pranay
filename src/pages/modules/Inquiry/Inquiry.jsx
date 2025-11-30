@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import InquiryCard from "../../../components/InquiryCard";
 import { PageHeader } from "../../../components/common/PageHeader";
 import DownIcon from "../../../components/icons/DownIcon";
 import SearchIcon from "../../../components/icons/SearchIcon";
-import useFetch from "../../../hooks/useFetch"; // Adjust path if different
+import useFetch from "../../../hooks/useFetch";
 import conf from "../../../config";
 
 const InquiryManager = () => {
@@ -28,7 +27,6 @@ const InquiryManager = () => {
         url: `${conf.apiBaseUrl}/contactInquiry`,
       });
 
-      console.log("API response:", response);
       setInquiries(response.inquiries);
       setLoading(false);
     } catch (error) {
@@ -38,7 +36,37 @@ const InquiryManager = () => {
     }
   };
 
-  // Filtered data based on search and status
+  const markAsRead = async (id) => {
+    try {
+      await fetchData({
+        method: "PATCH",
+        url: `${conf.apiBaseUrl}/contactInquiry/${id}/read`,
+      });
+
+      fetchInquiries();
+      fetchStatusCounts();
+    } catch (error) {
+      console.error("Mark as read error:", error);
+      setError("Failed to mark as read.");
+    }
+  };
+
+  const sendReply = async (id, replyMessage) => {
+    try {
+      await fetchData({
+        method: "POST",
+        url: `${conf.apiBaseUrl}/contactInquiry/${id}/reply`,
+        data: { replyMessage },
+      });
+
+      fetchInquiries();
+      fetchStatusCounts();
+    } catch (error) {
+      console.error("Reply error:", error);
+      setError("Failed to send reply.");
+    }
+  };
+
   const filteredInquiries = Array.isArray(inquiries)
     ? inquiries.filter((item) => {
         const name = item?.fullName?.toLowerCase() || "";
@@ -51,8 +79,6 @@ const InquiryManager = () => {
         return matchSearch && matchStatus;
       })
     : [];
-
-  // Count inquiries by status
 
   const [statusCounts, setStatusCounts] = useState({
     Pending: 0,
@@ -67,12 +93,10 @@ const InquiryManager = () => {
         url: `${conf.apiBaseUrl}/contactInquiry/count`,
       });
 
-      console.log("API response:", response);
       setStatusCounts(response.counts);
-      console.log("status:", statusCounts);
       setLoading(false);
     } catch (error) {
-      console.error("Failed to fetch inquiries:", error);
+      console.error("Failed to fetch count:", error);
       setError("Failed to load inquiries.");
       setLoading(false);
     }
@@ -85,7 +109,6 @@ const InquiryManager = () => {
         subtitle="Manage & Respond to customer Inquiry"
       />
 
-      {/* Status Cards */}
       <div className="flex gap-4">
         <StatusCard
           label="Pending"
@@ -107,7 +130,6 @@ const InquiryManager = () => {
         />
       </div>
 
-      {/* Search & Filter */}
       <div className="flex items-center gap-8 mt-4 text-sm">
         <div className="relative w-full">
           <SearchIcon className="absolute inset-y-0 left-3 top-2 text-xl" />
@@ -135,7 +157,6 @@ const InquiryManager = () => {
         </div>
       </div>
 
-      {/* Inquiry List */}
       <div className="px-2 mt-2 space-y-2 flex-1 overflow-y-auto scrollbar-hidden min-h-0">
         {loading ? (
           <p className="text-gray-600 text-center mt-6">Loading inquiries...</p>
@@ -143,7 +164,12 @@ const InquiryManager = () => {
           <p className="text-red-500 text-center mt-6">{error}</p>
         ) : filteredInquiries.length > 0 ? (
           filteredInquiries.map((item, idx) => (
-            <InquiryCard inquiry={item} key={idx} />
+            <InquiryCard
+              inquiry={item}
+              onMarkAsRead={markAsRead}
+              onSendReply={sendReply}
+              key={idx}
+            />
           ))
         ) : (
           <p className="text-gray-500 text-center mt-4">No inquiries found.</p>
@@ -153,7 +179,6 @@ const InquiryManager = () => {
   );
 };
 
-// Reusable StatusCard component
 const StatusCard = ({ label, count, bg, border }) => (
   <div
     className="rounded-2xl px-4 py-2 w-32 text-center"

@@ -6,49 +6,6 @@ import { toast } from "react-toastify";
 import useFetch from "../../../hooks/useFetch";
 import conf from "../../../config";
 
-const appointments = [
-  {
-    id: 1,
-    name: "Nitin Kumar",
-    type: "Group",
-    datetime: "15.06.25 , 11.30am",
-    city: "Nagpur",
-    payment: "Done",
-  },
-  {
-    id: 2,
-    name: "Robert Fox",
-    type: "Individual",
-    datetime: "15.06.25 , 11.45am",
-    city: "Nagpur",
-    payment: "Done",
-  },
-  {
-    id: 3,
-    name: "James Rob",
-    type: "Individual",
-    datetime: "15.06.25 , 01.00pm",
-    city: "Nagpur",
-    payment: "Done",
-  },
-  {
-    id: 4,
-    name: "James Rob",
-    type: "Individual",
-    datetime: "15.06.25 , 01.00pm",
-    city: "Nagpur",
-    payment: "Done",
-  },
-  {
-    id: 5,
-    name: "James Rob",
-    type: "Individual",
-    datetime: "15.06.25 , 01.00pm",
-    city: "Nagpur",
-    payment: "Done",
-  },
-];
-
 const DashboardCard = ({ title, value, subtitle, highlight }) => (
   <div className="bg-[#FEEBE4]  rounded-3xl p-4 w-60 shadow-md border border-[#FFBDBD]">
     <h4 className=" text-lg font-medium">{title}</h4>
@@ -73,9 +30,12 @@ export default function Dashboard() {
     totalAppointments: 0,
     groupAppointments: 0,
     nagpurUpcoming: 0,
+    umredUpcoming: 0,
     percentageChange: 0,
   });
   const [fetchData] = useFetch();
+
+  const [appointments, setAppointments] = useState([]);
 
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("fullName");
@@ -89,7 +49,8 @@ export default function Dashboard() {
       try {
         const res = await fetchData({
           method: "GET",
-          url: `${conf.apiBaseUrl}/dashboard/stats`,
+          // conf.apiBaseUrl should be like "http://localhost:5000/api/admin"
+          url: `${conf.apiBaseUrl}/appointments/dashboard/stats`,
         });
 
         if (res.success) {
@@ -106,7 +67,25 @@ export default function Dashboard() {
       }
     };
 
+    const fetchRecent = async () => {
+      try {
+        const res = await fetchData({
+          method: "GET",
+          url: `${conf.apiBaseUrl}/appointments/dashboard/recent`,
+        });
+
+        if (res.success) {
+          setAppointments(res.data);
+        } else {
+          toast.error(res.message || "Failed to load recent appointments");
+        }
+      } catch (err) {
+        toast.error(err.message || "Something went wrong!");
+      }
+    };
+
     fetchBookingOverview();
+    fetchRecent();
   }, [fetchData]);
 
   const columns = [
@@ -116,45 +95,39 @@ export default function Dashboard() {
     { id: "dateTime", label: "Date & Time", minWidth: 160 },
     { id: "city", label: "City", minWidth: 120 },
     { id: "payment", label: "Payment", minWidth: 100 },
-    { id: "action", label: "Action", minWidth: 100, align: "center" },
   ];
 
-  const rows = appointments.map((appointment, index) => ({
-    id: appointment.id,
+  // Map DB appointments to rows used by your DynamicTable component
+  const rows = appointments.map((a, index) => ({
+    id: a._id,
     srNo: String(index + 1).padStart(2, "0"),
 
     patientName: {
-      render: appointment.name,
-      sortValue: appointment.name.toLowerCase(),
+      render: a.patientName,
+      sortValue: a.patientName && a.patientName.toLowerCase(),
     },
 
     appointmentType: {
-      render: appointment.type,
-      sortValue: appointment.type.toLowerCase(),
+      render: a.appointmentType,
+      sortValue: a.appointmentType && a.appointmentType.toLowerCase(),
     },
 
     dateTime: {
-      render: appointment.datetime,
-      sortValue: appointment.datetime, // If needed, convert to Date for real sorting
+      render: `${new Date(a.date).toLocaleDateString()} , ${a.time}`,
+      sortValue: new Date(a.date),
     },
 
     city: {
-      render: appointment.city,
-      sortValue: appointment.city.toLowerCase(),
+      render: a.city,
+      sortValue: a.city && a.city.toLowerCase(),
     },
 
     payment: {
-      render: appointment.payment,
-      sortValue: appointment.payment.toLowerCase(),
+      render: a.paymentStatus || "Pending",
+      sortValue: (a.paymentStatus || "Pending").toLowerCase(),
     },
 
-    action: (
-      <div className="flex gap-3 justify-center">
-        <Eye className="w-5 h-5 cursor-pointer" />
-        <Pencil className="w-5 h-5 cursor-pointer" />
-        <Trash2 className="w-5 h-5 cursor-pointer" />
-      </div>
-    ),
+   
   }));
 
   return (
@@ -217,40 +190,6 @@ export default function Dashboard() {
           loading={loading}
           error={error}
         />
-        {/* <table className="min-w-full text-left text-base">
-          <thead>
-            <tr className="mb-2">
-              <th className="px-2 py-3 font-semibold text-center">Sr. No.</th>
-              <th className="px-2 py-3 font-semibold">Patient Name</th>
-              <th className="px-2 py-3 font-semibold">Appoint. Type</th>
-              <th className="px-2 py-3 font-semibold">Date & Time</th>
-              <th className="px-2 py-3 font-semibold">City</th>
-              <th className="px-2 py-3 font-semibold">Payment</th>
-              <th className="px-2 py-3 font-semibold">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {appointments.map((a, index) => (
-              <tr key={a.id} className="gap-12 hover:bg-gray-100 mb-2">
-                <td className="px-2 py-3 text-center">
-                  {String(index + 1).padStart(2, "0")}
-                </td>
-                <td className="px-2 py-3">{a.name}</td>
-                <td className="px-2 py-3">{a.type}</td>
-                <td className="px-2 py-3">{a.datetime}</td>
-                <td className="px-2 py-3">{a.city}</td>
-                <td className="px-2 py-3 text-green-600 font-medium">
-                  {a.payment}
-                </td>
-                <td className="px-2 py-3 flex gap-2 text-gray-600">
-                  <Eye className="w-4 h-4 cursor-pointer" />
-                  <Pencil className="w-4 h-4 cursor-pointer" />
-                  <Trash2 className="w-4 h-4 cursor-pointer" />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table> */}
       </div>
     </div>
   );

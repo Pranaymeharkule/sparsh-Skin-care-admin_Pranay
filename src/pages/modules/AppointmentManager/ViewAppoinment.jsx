@@ -42,7 +42,8 @@ export default function ViewAppoinment() {
     };
 
     fetchBookingOverview();
-  }, [fetchData]);
+  }, [fetchData, id]);
+
 
   return (
     <div className="flex flex-col h-full overflow-y-scroll">
@@ -85,7 +86,7 @@ export default function ViewAppoinment() {
                 Back
               </button>
             </Link>
-            <Link to="/appointments/edit">
+<Link to={`/appointments/edit/${id}`}>
               <button
                 type="button"
                 className="bg-[#716FCD] text-white font-semibold py-2 px-6 rounded-md cursor-pointer h-full"

@@ -1,6 +1,5 @@
 const conf = {
-  apiBaseUrl: import.meta.env.VITE_ADMIN_BASE_URL,
-  resetPasswordUrl: `${import.meta.env.VITE_ADMIN_BASE_URL}/admin/reset-password`,
+  apiBaseUrl: "http://localhost:5000/api/admin",
 };
 
 export default conf;

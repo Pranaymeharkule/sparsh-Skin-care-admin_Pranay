@@ -1,7 +1,8 @@
+// src/hooks/auth/useLogin.js
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
-import conf from "../../config/index";
+import conf from "../../config";
 import useFetch from "../useFetch";
 import { toast } from "react-toastify";
 import { adminAuthState } from "../../state/authenticatedState/authenticatedState";
@@ -10,21 +11,23 @@ const useLogin = () => {
   const [fetchData] = useFetch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const setUserInfo = useSetRecoilState(adminAuthState); 
+  const setUserInfo = useSetRecoilState(adminAuthState);
 
-  const adminLogin = async ({ email, password, role, rememberMe }) => {
-    const data = { email, password, role };
+  const adminLogin = async ({ email, password, rememberMe }) => {
+    const data = { email, password };
     setLoading(true);
+
     try {
       const res = await fetchData({
         method: "POST",
-        url: `${conf.apiBaseUrl}/admin/login`,
+        url: `${conf.apiBaseUrl}/login`,   // ✅ http://localhost:5000/api/admin/login
         data,
       });
 
-      console.log(res)
+      console.log("LOGIN RESPONSE:", res);
 
       if (res.success) {
+        // clean old tokens
         localStorage.removeItem("admin_token");
         sessionStorage.removeItem("admin_token");
 
@@ -34,13 +37,11 @@ const useLogin = () => {
           sessionStorage.setItem("admin_token", res.token);
         }
 
-        toast.success(res?.message);
-        setUserInfo({
-          isAuthenticated: true,
-        });
+        toast.success(res.message || "Login successful");
+        setUserInfo({ isAuthenticated: true });
         navigate("/dashboard");
       } else {
-        toast.error(res.message);
+        toast.error(res.message || "Invalid email or password");
       }
     } catch (error) {
       console.error("Login Error:", error);
@@ -56,6 +57,7 @@ const useLogin = () => {
     }
   };
 
+  // keep resetAdmin as it is or remove if not needed
   const resetAdmin = async ({ email, newPassword, confirmPassword }) => {
     const data = { email, newPassword, confirmPassword };
     setLoading(true);
@@ -67,12 +69,8 @@ const useLogin = () => {
       });
 
       if (res.success) {
-        // sessionStorage.setItem("admin_token", res.token);
         console.log(res);
         toast.success(res?.message);
-        // setUserInfo({
-        //   isAuthenticated: true,
-        // });
         navigate("/");
       } else {
         toast.error(res.message);
@@ -84,11 +82,7 @@ const useLogin = () => {
     }
   };
 
-  return {
-    resetAdmin,
-    adminLogin,
-    loading,
-  };
+  return { resetAdmin, adminLogin, loading };
 };
 
 export default useLogin;

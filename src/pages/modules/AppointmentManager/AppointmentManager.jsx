@@ -123,53 +123,54 @@ export default function AppointmentDashboard() {
     { id: "action", label: "Action", minWidth: 100, align: "center" },
   ];
 
-  const rows = appointments.map((appointment, index) => ({
-    id: appointment._id,
-    srNo: String(index + 1).padStart(2, "0"),
+const rows = appointments.map((appointment, index) => ({
+  id: appointment._id,
+  srNo: String(index + 1).padStart(2, "0"),
 
-    patientName: {
-      render: appointment.patientName || "N/A",
-      sortValue: (appointment.patientName || "").toLowerCase(),
-    },
+  patientName: {
+    render: appointment.patientName || "N/A",
+    sortValue: (appointment.patientName || "").toLowerCase(),
+  },
 
-    appointmentType: {
-      render: appointment.appointmentType || "N/A",
-      sortValue: (appointment.appointmentType || "").toLowerCase(),
-    },
+  appointmentType: {
+    render: appointment.appointmentType || "N/A",
+    sortValue: (appointment.appointmentType || "").toLowerCase(),
+  },
 
-    contact: {
-      render: appointment.contact || "N/A",
-      sortValue: appointment.contact || "",
-    },
+  contact: {
+    render: appointment.phone || "N/A",
+    sortValue: appointment.phone || "",
+  },
 
-    dateTime: {
-      render: appointment.dateTime || "N/A",
-      sortValue: appointment.dateTime || "", // Consider parsing date for accurate sorting
-    },
+  dateTime: {
+    render: `${appointment.date?.slice(0, 10)} , ${appointment.time}`,
+    sortValue: appointment.date || "",
+  },
 
-    city: {
-      render: appointment.city || "N/A",
-      sortValue: (appointment.city || "").toLowerCase(),
-    },
+  city: {
+    render: appointment.city || "N/A",
+    sortValue: (appointment.city || "").toLowerCase(),
+  },
 
-    payment: {
-      render: appointment.payment || "Pending",
-      sortValue: (appointment.payment || "pending").toLowerCase(),
-    },
+  payment: {
+    render: appointment.paymentStatus || "Pending",
+    sortValue: (appointment.paymentStatus || "Pending").toLowerCase(),
+  },
 
-    action: (
-      <div className="flex gap-3 justify-center">
-        <Trash2
-          className="w-5 h-5 cursor-pointer hover:text-red-600"
-          onClick={() => handleDetele(appointment._id)}
-        />
-        <Eye
-          className="w-5 h-5 cursor-pointer hover:text-indigo-700"
-          onClick={() => navigate(`view/${appointment._id}`)}
-        />
-      </div>
-    ),
-  }));
+  action: (
+    <div className="flex gap-3 justify-center">
+      <Trash2
+        className="w-5 h-5 cursor-pointer hover:text-red-600"
+        onClick={() => handleDetele(appointment._id)}
+      />
+      <Eye
+        className="w-5 h-5 cursor-pointer hover:text-indigo-700"
+        onClick={() => navigate(`view/${appointment._id}`)}
+      />
+    </div>
+  ),
+}));
+
 
   useEffect(() => {
     const fetchBookingOverview = async () => {
@@ -179,10 +180,10 @@ export default function AppointmentDashboard() {
       try {
         const res = await fetchData({
           method: "GET",
-          url: `${conf.apiBaseUrl}/appointments/getAllAppointments`,
+url: `${conf.apiBaseUrl}/appointments/getAllAppointments`,
         });
         if (res.success) {
-          setAppointments(res.appointments);
+setAppointments(res.appointments || []);
           console.log(res.appointments);
         } else {
           toast.error(res.message || "Failed to Appointments");
