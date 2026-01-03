@@ -22,6 +22,8 @@ import EditSetting from "./pages/modules/Setting/EditSetting";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Dashboard from "./pages/modules/Dashboard/Dashboard.jsx";
 import PaymentManager from "./pages/modules/PaymentManager/PaymentManager.jsx";
+import PaymentView from "./pages/modules/PaymentManager/PaymentView";
+
 
 function App() {
   return (
@@ -47,12 +49,14 @@ function App() {
               <Route path="view/:id" element={<ViewAppoinment />} />
               <Route path="edit" element={<EditAppointmentDetails />} />
             </Route>
- 
+
             <Route path="/setting" element={<DashboardSetting />} />
             <Route path="/notification" element={<Notification />} />
             <Route path="/otpemail" element={<OTPPage />} />
             <Route path="/newpassword" element={<NewPassword />} />
             <Route path="/editsetting" element={<EditSetting />} />
+                     <Route path="/payments/view/:id" element={<PaymentView />} />
+
           </Route>
         </Route>
       </Routes>

@@ -96,7 +96,7 @@ url: `${conf.apiBaseUrl}/verify-otp`,
           <p className="text-gray-600 mb-6">Enter the OTP to proceed</p>
 
           <div className="bg-gradient-to-br from-orange-100 to-pink-100 p-8 rounded-2xl shadow-xl max-w-md mx-auto">
-            <h2 className="text-xl font-bold text-gray-900">Sparsh Admin</h2>
+            <h2 className="text-xl font-bold text-gray-900">Thote  Admin</h2>
             <p className="text-sm text-gray-500 mb-6">Security Access</p>
 
             <div className="flex justify-center gap-2 mb-6">

@@ -51,7 +51,7 @@ export default function Sidebar({ isOpen, onClose }) {
           <div className="flex items-center gap-3">
             <img src={logo} alt="Logo" className="w-h-14 h-14" />
             <div className="text-2xl font-bold leading-tight text-left">
-              Sparsh <br />
+              Thote  <br />
               Skin Clinic
             </div>
           </div>

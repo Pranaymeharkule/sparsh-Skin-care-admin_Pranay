@@ -4,15 +4,15 @@ import { adminAuthState } from "../state/authenticatedState/authenticatedState";
 import { useRecoilValue } from "recoil";
 
 const ProtectedRoute = () => {
-  const isAuthenticated = useRecoilValue(adminAuthState).isAuthenticated;
+  const authState = useRecoilValue(adminAuthState);
 
   const token =
     localStorage.getItem("admin_token") ||
     sessionStorage.getItem("admin_token");
 
-  // if (!token || !isAuthenticated) {
-  //   return <Navigate to="/" />;
-  // }
+  if (!token || !authState.isAuthenticated) {
+    return <Navigate to="/" />;
+  }
 
   return <Outlet />;
 };

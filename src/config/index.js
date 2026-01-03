@@ -1,5 +1,5 @@
 const conf = {
-  apiBaseUrl: "http://localhost:5000/api/admin",
+apiBaseUrl: "https://sparsh-backend-1-iodu.onrender.com/api/admin",
 };
 
 export default conf;

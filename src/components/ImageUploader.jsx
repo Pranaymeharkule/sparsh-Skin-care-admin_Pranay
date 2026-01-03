@@ -1,89 +1,68 @@
-import React, { useRef, useState } from "react";
-import { CiCirclePlus } from "react-icons/ci";
-import uploadIcon from "../assets/svg/upload.svg"; // replace with your actual path
+import React, { useState } from "react";
 import useFetch from "../hooks/useFetch";
 import conf from "../config";
 import { toast } from "react-toastify";
-import DeleteIcon from "./icons/DeleteIcon";
 
-export default function ImageUploader({ setImageList }) {
-  const [image, setImage] = useState(null);
+const ImageUploader = ({ setImageList }) => {
+  const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [fetchData] = useFetch();
 
-  const handleImageUpload = () => {
-    if (loading) return;
+  const handleUpload = async (e) => {
+    e.preventDefault(); // 🔥 VERY IMPORTANT
 
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = "image/*";
-    input.onchange = (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        setImage(file);
-        handleUploadImage(file);
-      }
-    };
-    input.click();
-  };
-
-  const handleUploadImage = async (image) => {
-    if (!image) return;
+    if (!file) {
+      toast.error("Please select an image!");
+      return;
+    }
 
     const formData = new FormData();
-    formData.append("image", image);
-    setLoading(true);
+    formData.append("image", file);
+
     try {
+      setLoading(true);
+
       const res = await fetchData({
         method: "POST",
-        url: `${conf.apiBaseUrl}/gallery`,
+        url: `${conf.apiBaseUrl}/gallery`, // ✅ FIXED
         data: formData,
       });
 
-      console.log(res);
-
       if (res.success) {
-        const imageUrl = res.data.image;
-
-        setImageList((prev) => [{ image: imageUrl }, ...prev]);
-
-        toast.success("Appointment cancelled successfully!");
+        toast.success("Image uploaded successfully!");
+        setImageList((prev) => [res.data, ...prev]);
+        setFile(null);
       } else {
-        toast.error(res.message || "Failed to cancel appointment.");
+        toast.error(res.message || "Upload failed");
       }
     } catch (err) {
-      const message = err.message || "Something went wrong!";
-      toast.error(message);
+      toast.error(err.message || "Upload failed!");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div>
-      <div
-        className="w-full max-w-[20rem] h-64 rounded-2xl flex flex-col items-center justify-center gap-y-2 bg-[#E8E8E8] border border-[#D6D6D6] cursor-pointer"
-        onClick={handleImageUpload}
-      >
-        
-        {loading ? (
-          <div className="flex flex-col items-center">
-            <div className="w-8 h-8 border-4 border-gray-300 border-t-[#716FCD] rounded-full animate-spin"></div>
-            <p className="mt-4 text-sm text-gray-500">Uploading...</p>
-          </div>
-        ) : (
-          <>
-            <CiCirclePlus className="text-4xl" />
-            <p>Add new Image</p>
-            <p className="flex items-center gap-2">
-              <img src={uploadIcon} alt="Upload" className="w-6 h-6" />
-              Upload Image
-            </p>
-          </>
-        )}
-      </div>
-    </div>
-  );
-}
+    <form
+      onSubmit={handleUpload}
+      className="bg-gray-100 p-4 rounded-xl text-center border border-gray-300"
+    >
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(e) => setFile(e.target.files[0])}
+        className="mb-2"
+      />
 
-//   setImageList(prev =>[{image}, ...prev])
+      <button
+        type="submit"
+        disabled={loading}
+        className="bg-black text-white px-4 py-2 rounded-lg"
+      >
+        {loading ? "Uploading..." : "Upload"}
+      </button>
+    </form>
+  );
+};
+
+export default ImageUploader;

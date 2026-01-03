@@ -2,7 +2,7 @@ import { useState } from "react";
 import React from "react";
 import { Eye, EyeOff } from "lucide-react";
 import img8 from "../../assets/Gallery/img8.png"; // Doctor illustration
-import logo from "../../assets/Gallery/logo asarsh.jpg"; // Logo image
+import logo from "../../assets/Gallery/Hospital logo.png"; // Logo image
 import useLogin from "../../hooks/auth/useLogin";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -31,7 +31,7 @@ export default function Login() {
     <div className="h-full overflow-x-scroll bg-[#fde7e2] flex flex-col px-8 relative ">
       {/* Top Row: Logo */}
       <div className="flex items-center justify-between my-4">
-        <img src={logo} alt="Sparsh Logo" className="w-16 h-auto" />
+        <img src={logo} alt="Thote  Logo" className="w-60 h-auto" />
       </div>
 
       {/* Main content */}
@@ -51,12 +51,12 @@ export default function Login() {
         <div className="flex flex-col items-center w-full px-4">
           <h1 className="text-4xl md:text-5xl font-bold mb-2">Welcome</h1>
           <p className="text-gray-600 mb-6">
-            To the Dashboard of Sparsh Skin Clinic
+            To the Dashboard of Thote multi-speciality hospital
           </p>
 
           <div className="bg-[#fceae4] w-full max-w-md p-6 rounded-xl shadow-lg">
             <h2 className="text-xl font-semibold mb-1">
-              Sparsh Skin Care Admin
+              Thote  Skin Care Admin
             </h2>
             <p className="text-gray-500 text-sm mb-6">
               Security Administration Access
