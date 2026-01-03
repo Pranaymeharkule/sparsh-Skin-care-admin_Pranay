@@ -33,7 +33,7 @@ export default function DashboardSetting() {
                     </div>
                     <div className="p-1">
                       <p className="text-s text-gray-600">First name</p>
-                      <p className="font-medium py-2">pranay</p>
+                      <p className="font-medium py-2">Harshal</p>
                     </div>
                     <div className="p-1">
                       <p className="text-s text-gray-600">Last name</p>

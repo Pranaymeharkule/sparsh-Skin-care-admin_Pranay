@@ -43,7 +43,6 @@ const PublicRoute = () => {
         <Route path="/dashboardsetting" element={<DashboardSetting />} />
         <Route path="/dashboardnotification" element={<DashbaordNotification />} />
 
-
       </Route>
     </Routes>
   );

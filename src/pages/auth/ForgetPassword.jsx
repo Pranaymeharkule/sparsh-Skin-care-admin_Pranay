@@ -69,7 +69,7 @@ url: `${conf.apiBaseUrl}/forgot-password`,
     <div className="h-full overflow-x-scroll bg-[#fde7e2] flex flex-col px-8 relative ">
       {/* Top Row: Logo and Welcome */}
       <div className="flex items-center justify-between my-4">
-        <img src={logo} alt="Thote  Logo" className="w-16 h-auto" />
+        <img src={logo} alt="Sparsh Logo" className="w-16 h-auto" />
       </div>
 
       {/* Main content */}
@@ -90,7 +90,7 @@ url: `${conf.apiBaseUrl}/forgot-password`,
             Forgot Password?
           </h1>
           <p className="text-gray-600 mb-6 text-center">
-            To the Dashboard of Thote multi-speciality hospital
+            To the Dashboard of Sparsh Skin Clinic
           </p>
           {/* Login Form */}
           <form
@@ -98,7 +98,7 @@ url: `${conf.apiBaseUrl}/forgot-password`,
             onSubmit={handleGetOTP}
           >
             <h2 className="text-xl font-semibold text-center mb-1">
-              Thote  Skin Care Admin
+              Sparsh Skin Care Admin
             </h2>
             <p className="text-center text-gray-500 text-sm mb-6">
               Security Administration Access

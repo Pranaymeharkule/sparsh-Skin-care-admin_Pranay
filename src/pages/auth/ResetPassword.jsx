@@ -60,7 +60,7 @@ url: `${conf.apiBaseUrl}/reset-password`,
   return (
     <div className="h-full overflow-x-scroll bg-[#fde7e2] flex flex-col px-8 relative ">
       <div className="flex items-center justify-between my-4">
-        <img src={logo} alt="Thote  Logo" className="w-16 h-auto" />
+        <img src={logo} alt="Sparsh Logo" className="w-16 h-auto" />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center justify-center lg:px-10 flex-1">
@@ -73,7 +73,7 @@ url: `${conf.apiBaseUrl}/reset-password`,
           <p className="text-gray-600 mb-6">Generate a new password</p>
 
           <div className="bg-[#fceae4] w-full max-w-md p-6 rounded-xl shadow-lg">
-            <h2 className="text-xl font-semibold mb-1">Thote  Skin Care Admin</h2>
+            <h2 className="text-xl font-semibold mb-1">Sparsh Skin Care Admin</h2>
             <p className="text-gray-500 text-sm mb-6">Security Administration Access</p>
 
             <form className="space-y-4" onSubmit={handleSave}>

@@ -1,98 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import useFetch from "../hooks/useFetch";
-import conf from "../config";
-
-import { toast } from "react-toastify";
 
 const Calendar = () => {
   const [blockDate, setBlockDate] = useState(false);
-  const [blockedDates, setBlockedDates] = useState([]); // YYYY-MM-DD
+  const [blockedDates, setBlockedDates] = useState([7, 14, 21, 28]);
   const [selectedDates, setSelectedDates] = useState([]);
   const [currentDate, setCurrentDate] = useState(new Date(2025, 5)); // June 2025
 
-  const [fetchData] = useFetch();
-
   const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-  /* ================= FETCH BLOCKED DATES ================= */
-  useEffect(() => {
-    fetchBlockedDates();
-  }, []);
-
-  const fetchBlockedDates = async () => {
-    try {
-      const res = await fetchData({
-        method: "GET",
-        url: `${conf.apiBaseUrl}/block-dates`,
-      });
-
-      if (res.success) {
-        setBlockedDates(res.data.map((d) => d.date));
-      }
-    } catch (err) {
-      toast.error("Failed to load blocked dates");
-    }
-  };
-
-  /* ================= HELPERS ================= */
-  const formatDate = (dateObj) =>
-    dateObj.toISOString().split("T")[0]; // YYYY-MM-DD
-
-  const toggleDateSelection = (dateObj) => {
-    const formatted = formatDate(dateObj);
-    if (blockedDates.includes(formatted)) return;
+  const toggleDateSelection = (date) => {
+    if (blockedDates.includes(date.getDate())) return;
+    const key = date.getDate();
 
     setSelectedDates((prev) =>
-      prev.includes(formatted)
-        ? prev.filter((d) => d !== formatted)
-        : [...prev, formatted]
+      prev.includes(key) ? prev.filter((d) => d !== key) : [...prev, key]
     );
   };
 
-  /* ================= BLOCK / UNBLOCK ================= */
-  const handleToggle = async () => {
-    try {
-      if (!blockDate) {
-        // BLOCK
-        for (const date of selectedDates) {
-          await fetchData({
-            method: "POST",
-            url: `${conf.apiBaseUrl}/block-dates`,
-            data: { date },
-          });
-        }
-
-        setBlockedDates((prev) => [...prev, ...selectedDates]);
-        toast.success("Date(s) blocked successfully");
-      } else {
-        // UNBLOCK
-        for (const date of selectedDates) {
-          await fetchData({
-            method: "DELETE",
-            url: `${conf.apiBaseUrl}/block-dates/${date}`,
-          });
-        }
-
-        setBlockedDates((prev) =>
-          prev.filter((d) => !selectedDates.includes(d))
-        );
-        toast.success("Date(s) unblocked successfully");
-      }
-
-      setSelectedDates([]);
-      setBlockDate((prev) => !prev);
-    } catch (err) {
-      toast.error("Operation failed");
-    }
-  };
-
-  /* ================= MONTH CHANGE ================= */
-  const changeMonth = (offset) => {
-    setCurrentDate(
-      new Date(currentDate.getFullYear(), currentDate.getMonth() + offset)
-    );
+  const handleToggle = () => {
+    setBlockedDates((prev) => [...new Set([...prev, ...selectedDates])]);
     setSelectedDates([]);
+    setBlockDate((prev) => !prev);
+  };
+
+  const changeMonth = (offset) => {
+    const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + offset);
+    setCurrentDate(newDate);
+    setSelectedDates([]); // Reset selection on month change
   };
 
   const getDaysInMonth = (year, month) => {
@@ -105,12 +40,8 @@ const Calendar = () => {
     return days;
   };
 
-  const daysInMonth = getDaysInMonth(
-    currentDate.getFullYear(),
-    currentDate.getMonth()
-  );
-
-  const firstDay = (daysInMonth[0].getDay() + 6) % 7;
+  const daysInMonth = getDaysInMonth(currentDate.getFullYear(), currentDate.getMonth());
+  const firstDay = (daysInMonth[0].getDay() + 6) % 7; // adjust for Monday start
 
   return (
     <div className="flex gap-10 flex-wrap items-start h-full">
@@ -122,7 +53,9 @@ const Calendar = () => {
             <FaChevronLeft />
           </button>
           <h2 className="text-lg">
-            {currentDate.toLocaleString("default", { month: "long" })}{" "}
+            {currentDate.toLocaleString("default", {
+              month: "long",
+            })}{" "}
             {currentDate.getFullYear()}
           </h2>
           <button onClick={() => changeMonth(1)}>
@@ -135,7 +68,7 @@ const Calendar = () => {
           {days.map((day) => (
             <div
               key={day}
-              className={`aspect-square flex items-center justify-center rounded-md border border-[#C2A2AC] ${
+              className={`aspect-square flex items-center justify-center rounded-md border border-[#C2A2AC] text-gray-700 ${
                 day === "Sun" && "bg-[#DFDFDF]"
               }`}
             >
@@ -149,14 +82,13 @@ const Calendar = () => {
           {[...Array(firstDay)].map((_, i) => (
             <div key={`blank-${i}`} />
           ))}
-
           {daysInMonth.map((dateObj) => {
-            const formatted = formatDate(dateObj);
-            const isBlocked = blockedDates.includes(formatted);
-            const isSelected = selectedDates.includes(formatted);
+            const day = dateObj.getDate();
+            const isBlocked = blockedDates.includes(day);
+            const isSelected = selectedDates.includes(day);
 
             let classes =
-              "aspect-square flex items-center justify-center rounded-md border border-[#C2A2AC]";
+              "aspect-square flex items-center justify-center rounded-md border border-[#C2A2AC] text-gray-700";
 
             if (isBlocked) {
               classes += " bg-[#DFDFDF] cursor-not-allowed";
@@ -168,11 +100,11 @@ const Calendar = () => {
 
             return (
               <div
-                key={formatted}
+                key={day}
                 className={classes}
                 onClick={() => toggleDateSelection(dateObj)}
               >
-                {dateObj.getDate()}
+                {day}
               </div>
             );
           })}
@@ -184,12 +116,12 @@ const Calendar = () => {
         <p>Block the date?</p>
         <button
           onClick={handleToggle}
-          className={`w-16 h-8 flex items-center rounded-full px-1 ${
+          className={`w-16 h-8 flex items-center rounded-full px-1 transition-colors duration-300 ${
             blockDate ? "bg-[#7876D0]" : "bg-[#FFD0D0]"
           }`}
         >
           <div
-            className={`w-6 h-6 rounded-full bg-white shadow-md transform ${
+            className={`w-6 h-6 rounded-full bg-white shadow-md transform transition-transform duration-300 text-xs flex items-center justify-center ${
               blockDate ? "translate-x-8" : "translate-x-0"
             }`}
           >

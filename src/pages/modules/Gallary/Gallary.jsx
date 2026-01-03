@@ -1,4 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { CiCirclePlus } from "react-icons/ci";
+// import uploadIcon from "../../../assets/svg/upload.svg";
+// import image1 from "../../../assets/Gallery/image1.png";
+// import image2 from "../../../assets/Gallery/image2.png";
+// import image3 from "../../../assets/Gallery/image3.png";
+// import image4 from "../../../assets/Gallery/image4.png";
+// import image5 from "../../../assets/Gallery/image5.png";
+// import image6 from "../../../assets/Gallery/image6.png";
+// import image7 from "../../../assets/Gallery/image7.png";
 import GalleryCard from "../../../components/GallaryCard";
 import { PageHeader } from "../../../components/common/PageHeader";
 import useFetch from "../../../hooks/useFetch";
@@ -13,113 +22,99 @@ const Gallery = () => {
   const [loading, setLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [imageList, setImageList] = useState([]);
-
   const [selectedImageId, setSelectedImageId] = useState("");
   const [showCancelPopup, setShowCancelPopup] = useState(false);
 
   const [fetchData] = useFetch();
 
-  // ---------------- FETCH IMAGES ---------------- //
   useEffect(() => {
-    fetchImages();
-  }, []);
-
-  const fetchImages = async () => {
-    try {
+    const fetchBookingOverview = async () => {
       setLoading(true);
+      setError("");
 
-      const res = await fetchData({
-        method: "GET",
-        url: `${conf.apiBaseUrl}/gallery`,
-      });
-
-      if (res.success) {
-        setImageList(res.data);
-      } else {
-        toast.error(res.message || "Failed to load gallery images");
+      try {
+        const res = await fetchData({
+          method: "GET",
+          url: `${conf.apiBaseUrl}/gallery`,
+        });
+        if (res.success) {
+          setImageList(res.data);
+        } else {
+          toast.error(res.message || "Failed to Images");
+        }
+      } catch (err) {
+        const message = err.message || "Something went wrong!";
+        toast.error(message);
+        setError(message);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      toast.error(err.message || "Something went wrong!");
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
-  // ---------------- DELETE IMAGE ---------------- //
-  const handleDelete = (id) => {
+    fetchBookingOverview();
+  }, [fetchData]);
+
+  const handleDetele = async (id) => {
     setSelectedImageId(id);
     setShowCancelPopup(true);
   };
 
-  const confirmDelete = async (id) => {
-    if (!id || deleteLoading) return;
+  const handleCancelConfirm = async (id) => {
+    if (loading || deleteLoading) return;
+    if (!id) return;
 
     try {
       setDeleteLoading(true);
-
       const res = await fetchData({
         method: "DELETE",
         url: `${conf.apiBaseUrl}/gallery/${id}`,
       });
-
+      
       if (res.success) {
         toast.success("Image deleted successfully!");
-
-        setImageList((prev) => prev.filter((img) => img._id !== id));
+        setImageList((prevList) => prevList.filter((img) => img._id !== id));
       } else {
-        toast.error(res.message);
+        toast.error(res.message || "Failed to delete image.");
       }
     } catch (err) {
-      toast.error(err.message || "Something went wrong!");
+      const message = err.message || "Something went wrong!";
+      toast.error(message);
     } finally {
       setShowCancelPopup(false);
-      setDeleteLoading(false);
+      setDeleteLoading(false)
     }
   };
 
   return (
     <div className="flex flex-col h-full">
+      {/* Top Controls */}
       <PageHeader
-        title="Gallery Manager"
-        subtitle="Edit and add photos in the gallery section."
+        title={"Gallery Manager"}
+        subtitle={"Edit and add photos in the gallery section."}
       />
 
-      <div className="h-full overflow-y-auto mt-2 px-2">
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-10">
-
-          {/* Upload button section */}
+      <div className="h-full overflow-y-auto mt-2">
+        {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-12 px-2"> */}
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-10 px-2">
           <ImageUploader setImageList={setImageList} />
-
-          {/* Gallery Items */}
-          {imageList.length === 0 ? (
-            <p className="text-gray-500 text-center col-span-full">
-              No images found.
-            </p>
-          ) : (
-            imageList.map((img) => (
+          {imageList.map((img) => (
+            <div key={img._id} className="bg-[#C1A2AC] relative rounded-2xl">
+              <GalleryCard image={img.image} />
               <div
-                key={img._id}
-                className="bg-[#C1A2AC] relative rounded-2xl overflow-hidden"
+                className="absolute bottom-3 right-3 cursor-pointer"
+                onClick={() => handleDetele(img._id)}
               >
-                <GalleryCard image={img.image} />
-
-                <button
-                  className="absolute bottom-3 right-3 cursor-pointer"
-                  onClick={() => handleDelete(img._id)}
-                >
-                  <DeleteIcon />
-                </button>
+                <DeleteIcon />
               </div>
-            ))
-          )}
+            </div>
+          ))}
         </div>
       </div>
-
       {showCancelPopup && (
         <CancelOverlay
-          onConfirm={() => confirmDelete(selectedImageId)}
+          onConfirm={() => handleCancelConfirm(selectedImageId)}
           onCancel={() => setShowCancelPopup(false)}
-          message="Are you sure you want to delete this image?"
+          message={"Are you sure you want to delete image?"}
           loading={deleteLoading}
         />
       )}
